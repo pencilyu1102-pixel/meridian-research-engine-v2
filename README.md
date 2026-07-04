@@ -780,7 +780,6 @@ meridian-research-engine-v2/
 
 | 版本 | 日期 | 主要变更 |
 |---|---|---|
-| （上游）v1.1-pricelevel | 上游初始版本 | 九代理架构 + Price Level Engine + 基础 Gatekeeper |
 | **v2.0.0-beta** | 2026-07-04 | **Meridian Research Engine 2.0 首发版本**：市场/行业适配器、基本面驱动模型、竞争份额模型、隐含预期反推、证伪框架、数据质量清单、Gatekeeper v2.1（三层/三档/三模式）、25 规范章节模板、综合测试套件 |
 
 详见 [CHANGELOG.md](CHANGELOG.md)。

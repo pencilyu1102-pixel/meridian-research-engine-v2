@@ -741,7 +741,6 @@ Current public version: **v2.0.0-beta** (Meridian Research Engine 2.0 initial re
 
 | Version | Date | Key Changes |
 |---|---|---|
-| (upstream) v1.1-pricelevel | Upstream initial | 9-agent architecture, Price Level Engine, basic Gatekeeper |
 | **v2.0.0-beta** | 2026-07-04 | **Meridian Research Engine 2.0 initial public-facing release** |
 
 See [CHANGELOG.md](CHANGELOG.md).
