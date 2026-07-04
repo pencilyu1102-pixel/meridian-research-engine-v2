@@ -256,7 +256,7 @@ add_table(
         ["估值锚生成数正确", "✅ 通过", "5个倍数生成5个锚点"],
         ["EPS 10 × 12x = $120", "✅ 通过", "价格计算精确"],
         ["EPS 10 × 20x = $200", "✅ 通过", "价格计算精确"],
-        ["报告含ticker", "✅ 通过", "MSFT正确渲染"],
+        ["报告含ticker", "✅ 通过", "SAMPLE正确渲染"],
         ["报告含EPS", "✅ 通过", "12.50正确渲染"],
         ["报告含倍数表头", "✅ 通过", "Markdown表格有Multiple列"],
         ["默认12个倍数", "✅ 通过", "16x-23x共12个档位"],
@@ -340,7 +340,7 @@ add_table(
     [
         ["macro_score.py", "0", "含 Total score", "✅ 通过"],
         ["portfolio_cost.py", "0", "含 remaining_shares", "✅ 通过"],
-        ["price_level_engine.py", "0", "含 MSFT", "✅ 通过"],
+        ["price_level_engine.py", "0", "含 SAMPLE", "✅ 通过"],
         ["valuation_scenario.py", "0", "含 Bear case", "✅ 通过"],
         ["cross_validate.py", "0", "含 conflict", "✅ 通过"],
         ["source_audit.py（准入）", "0", "含 can_enter_conclusion", "✅ 通过"],

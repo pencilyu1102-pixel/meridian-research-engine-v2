@@ -50,9 +50,9 @@ Public examples in this repository use generic identifiers such as SAMPLE, TICKE
 
 公开展示样例仅使用 `SAMPLE`、`TICKER` 或 `ABC` 等虚拟标识。
 
-Company-specific historical reports, if retained, are stored only under `reports/archive_nonpublic/` for internal process review and framework validation. They are not public sample reports and must not be treated as investment advice, trading recommendations, target-price guidance, or model endorsements.
+Company-specific historical reports are not included in this public repository. All public examples use `SAMPLE`, `TICKER`, or `ABC` generic identifiers and do not constitute investment advice, trading recommendations, target-price guidance, or model endorsements.
 
-如保留具体公司历史报告，仅存放在 `reports/archive_nonpublic/`，用于内部流程复盘和框架校验。它们不是公开样例，不构成投资建议、交易推荐、目标价指引或模型背书。
+公开仓库不包含任何具体公司历史投研报告。所有公开展示例均使用 `SAMPLE`、`TICKER` 或 `ABC` 等虚拟标识，不构成投资建议、交易推荐、目标价指引或模型背书。
 
 ---
 
@@ -651,8 +651,8 @@ meridian-research-engine-v2/
 │
 ├── templates/                 # 报告模板
 │   ├── standard_research_report.md         # 模板入口
-│   ├── standard_research_report_zh.md      # 中文报告模板（v1.1，24 章节）
-│   ├── standard_research_report_en.md      # 英文报告模板（v1.1，25 章节）
+│   ├── standard_research_report_zh.md      # 中文报告模板（v2.0.0-beta，25 规范章节）
+│   ├── standard_research_report_en.md      # 英文报告模板（v2.0.0-beta，25 规范章节）
 │   ├── expanded_research_report.md         # 扩展报告模板
 │   ├── data_point_card_template.md         # 数据卡片
 │   ├── data_meaning_block_template.md      # 数据意义块
@@ -700,8 +700,8 @@ meridian-research-engine-v2/
 │   ├── test_contradiction_hunter.py
 │   └── test_cross_validate.py
 │
-├── reports/                   # 报告输出
-│   └── 688256_寒武纪_投研报告_v2_20260702.md   # 示例研报：寒武纪（公开数据）
+├── reports/                   # 报告输出示例
+│   └── SAMPLE_research_report_zh.md
 │
 └── docs/                      # 文档
     ├── quickstart_usage.md             # 快速开始

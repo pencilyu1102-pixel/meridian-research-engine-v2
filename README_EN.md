@@ -49,9 +49,9 @@ Public examples in this repository use generic identifiers such as SAMPLE, TICKE
 
 公开展示样例仅使用 `SAMPLE`、`TICKER` 或 `ABC` 等虚拟标识。
 
-Company-specific historical reports, if retained, are stored only under `reports/archive_nonpublic/` for internal process review and framework validation. They are not public sample reports and must not be treated as investment advice, trading recommendations, target-price guidance, or model endorsements.
+Company-specific historical reports are not included in this public repository. All public examples use `SAMPLE`, `TICKER`, or `ABC` generic identifiers and do not constitute investment advice, trading recommendations, target-price guidance, or model endorsements.
 
-如保留具体公司历史报告，仅存放在 `reports/archive_nonpublic/`，用于内部流程复盘和框架校验。它们不是公开样例，不构成投资建议、交易推荐、目标价指引或模型背书。
+公开仓库不包含任何具体公司历史投研报告。所有公开展示例均使用 `SAMPLE`、`TICKER` 或 `ABC` 等虚拟标识，不构成投资建议、交易推荐、目标价指引或模型背书。
 
 ---
 
@@ -664,7 +664,8 @@ meridian-research-engine-v2/
 ├── tools/                     # Core tools (14 CLI tools)
 ├── examples/                  # Example data (5 files)
 ├── tests/                     # Unit tests (7 test files)
-├── reports/                   # Report output directory
+├── reports/                   # Report output examples
+│   ├── SAMPLE_research_report_zh.md
 │
 └── docs/                      # Documentation (18 doc files)
     ├── quickstart_usage.md
@@ -686,7 +687,7 @@ meridian-research-engine-v2/
     └── price_level_engine.md
 ```
 
-|---
+---
 
 ## Who this is for
 
