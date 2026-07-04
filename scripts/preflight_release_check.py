@@ -126,6 +126,7 @@ grep_cmd = [
     "--exclude-dir=.venv",
     "--exclude-dir=__pycache__",
     "--exclude-dir=scripts",
+    "--exclude-dir=outputs",
     ".",
 ]
 
