@@ -1,6 +1,6 @@
 # Meridian Research Engine 2.0 Skill
 
-This file defines the core operating rules for Meridian Research Engine 2.0, also known as Meridian Research Engine 2.0 — a **global equity buy-side research framework**.
+This file defines the core operating rules for Meridian Research Engine 2.0, the `v2.0.0-beta` initial public-facing release of a **global equity buy-side research framework**.
 
 ## 0. Report language rules
 

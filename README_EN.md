@@ -2,11 +2,14 @@
 
 中文说明见：[README.md](README.md)
 
+Project name: Meridian Research Engine 2.0  
+Chinese name: 经纬投研引擎 2.0  
+Initial release: v2.0.0-beta  
 Repository: `pencilyu1102-pixel/meridian-research-engine-v2`
 
 > An AI-assisted global equity buy-side research framework integrating market adapters, industry adapters, fundamental driver models, competition share models, implied expectation reverse-engineering, and falsification-backed decision-making, all validated by the Gatekeeper v2.1 release-quality system.
 
-### Core Design Philosophy
+### Core Design Philosophy (v2.0.0-beta initial release)
 
 1. **Data validation** as foundation.
 2. **Fundamental driver model** (revenue/gross margin/cost/cash flow/ROIC) and **competition share model** (TAM/SAM/SOM) as core.
@@ -177,7 +180,7 @@ See:
 
 ---
 
-## Gatekeeper v2 — Report release quality check
+## Gatekeeper v2.1 — Report release-quality check
 
 `tools/report_gatekeeper.py` is the content-level release audit system.
 
@@ -252,7 +255,7 @@ python tools/report_gatekeeper.py reports/REPORT.md --language en --mode smoke
 | Portfolio execution | Separate company research from account-level action |
 | Bear case | Actively search for strongest opposing evidence |
 | Falsification framework | Core judgment thresholds + data sources + trigger actions |
-| Report gatekeeper v2 | 3-tier + 3-grade + 3-mode release quality check |
+| Report gatekeeper v2.1 | 3-tier + 3-grade + 3-mode release quality check |
 
 ---
 
@@ -309,7 +312,7 @@ Select market adapter (US/CN/HK/GL)
 → Four-layer judgment (company/valuation/account/review)
 → Final action framework (4 disciplines)
 → Maximum risk + next review triggers
-→ Gatekeeper v2 release check
+→ Gatekeeper v2.1 release check
 ```
 
 The goal: **prevent AI from jumping directly to a conclusion.**
@@ -715,7 +718,7 @@ meridian-research-engine-v2/
 - [x] Implied expectation reverse-engineering model
 - [x] Falsification framework (thresholds + data sources + trigger actions)
 - [x] Data quality checklist (10 mandatory validations)
-- [x] Gatekeeper v2 (3-tier/3-grade/3-mode + 10 downgrade rules)
+- [x] Gatekeeper v2.1 (3-tier/3-grade/3-mode + 10 downgrade rules)
 - [x] Comprehensive test suite (test_comprehensive.py)
 
 **To do:**
@@ -732,30 +735,26 @@ meridian-research-engine-v2/
 
 ## Version info
 
-Current version: **v1.0-beta** (Meridian Research Engine 2.0 initial release)
+Current public version: **v2.0.0-beta** (Meridian Research Engine 2.0 initial release)
 
 | Version | Date | Key Changes |
 |---|---|---|
 | (upstream) v1.1-pricelevel | Upstream initial | 9-agent architecture, Price Level Engine, basic Gatekeeper |
-| **v1.0-beta** | 2026-07-03 | **Meridian Research Engine 2.0 initial release** |
+| **v2.0.0-beta** | 2026-07-04 | **Meridian Research Engine 2.0 initial public-facing release** |
 
 See [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
-## Credits / Attribution
+## Credits / Project origin
 
-This project is a fork of [**pencilyu1102-pixel/golden-research-engine**](https://github.com/pencilyu1102-pixel/golden-research-engine), whose upstream is the MIT-licensed open-source project [AI Berkshire](https://github.com/xbtlin/ai-berkshire) by xbtlin. It is not the official project and does not represent the upstream authors or maintainers.
+The original upstream project of Meridian Research Engine 2.0 is the MIT-licensed open-source project `xbtlin/ai-berkshire`.
 
-| Level | Repository | Description |
-|---|---|---|
-| Root upstream | [`xbtlin/ai-berkshire`](https://github.com/xbtlin/ai-berkshire) | MIT License, original author xbtlin |
-| Direct upstream | [`pencilyu1102-pixel/golden-research-engine`](https://github.com/pencilyu1102-pixel/golden-research-engine) | Derivative with global framework v1.0 |
-| **This repo** | **`pencilyu1102-pixel/meridian-research-engine-v2`** | **This fork, v1.0-beta** |
+Based on that upstream project, Ada Pan and topgunsyang-dotcom co-created, reorganized, and extended the workflow around AI-assisted equity research, data audit, macro-cycle analysis, sector rotation, bear-case reasoning, falsification framework, and Gatekeeper release checks. The current repository is the initial public-facing Meridian Research Engine 2.0 release.
 
-Based on the upstream projects, this fork has been extended with global framework upgrades: market/industry adapters, fundamental driver model, competition share model, Gatekeeper v2 release validation, standardized report templates, and comprehensive testing.
+This project is not the official AI Berkshire project and does not represent xbtlin or the upstream maintainers. It is also not an official project of any broker, investment adviser, exchange, data provider, financial institution, or company.
 
-The upstream copyright notice and MIT permission notice are retained in `LICENSE` and `NOTICE`. New project contributions are copyrighted by Meridian Research Engine 2.0 contributors.
+The original upstream copyright notice and MIT License terms are retained in LICENSE and NOTICE.
 
 ---
 

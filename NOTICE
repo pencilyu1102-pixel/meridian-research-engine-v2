@@ -1,53 +1,38 @@
 # Meridian Research Engine 2.0
+
 Copyright (c) 2026 xbtlin
 Copyright (c) 2026 Meridian Research Engine contributors
 
-This project is maintained as an independent open-source derivative project by the current repository owner.
-It is not the official AI Berkshire project and is not affiliated with, endorsed by, or sponsored by xbtlin or any upstream project maintainer.
-It is also not an official project of any company, institution, broker, exchange, or data provider.
-
-Intermediate working base / 中间工作基础
-----------------------------------------
-
-This derivative project was developed using the following intermediate working base:
-
-- Intermediate project: topgunsyang-dotcom/argus-research-engine
-- Current derivative: pencilyu1102-pixel/meridian-research-engine-v2
-
-本衍生项目使用了以下中间工作基础进行开发：
-- 中间项目：topgunsyang-dotcom/argus-research-engine
-- 当前衍生项目：pencilyu1102-pixel/meridian-research-engine-v2
-
-Attribution / 来源说明
-----------------------
+Original upstream / 原始上游
+----------------------------
 
 This project is based in part on the following MIT-licensed upstream project:
 
-- Original project name: AI Berkshire
+- Original upstream project: AI Berkshire
 - Original repository: https://github.com/xbtlin/ai-berkshire
 - Original author / organization: xbtlin
 - Original license: MIT License
 - Original copyright notice: Copyright (c) 2026 xbtlin
 
-The upstream project README describes AI Berkshire as an investment research Skill collection compatible with Claude Code and Codex, systematizing value-investing methods through AI Agent workflows.
+Co-created working base / 共创工作基础
+--------------------------------------
 
-Meridian Research Engine 2.0 is a derivative and substantially reorganized project focused on macro-cycle analysis, sector rotation, data audit, report gatekeeping, price-level mapping, portfolio-execution checks, and conservative research workflow discipline.
+Meridian Research Engine 2.0 was further developed from a co-created working base by Ada Pan and topgunsyang-dotcom, including work on AI-assisted equity research workflow, macro-cycle analysis, sector rotation, data audit, bear-case reasoning, falsification framework, and Gatekeeper release checks.
 
-Modification summary
---------------------
+- Co-created working base: topgunsyang-dotcom/argus-research-engine
+- Current project: pencilyu1102-pixel/meridian-research-engine-v2
+- Current project name: Meridian Research Engine 2.0｜经纬投研引擎 2.0
 
-Compared with the upstream AI Berkshire project, this repository has been adapted and extended toward:
+本项目在 MIT 上游 xbtlin/ai-berkshire 的基础上，经 Ada Pan 与 topgunsyang-dotcom 围绕 AI 辅助投研工作流、数据审计、宏观周期、板块轮动、反向论证、证伪框架与 Gatekeeper 准出机制进行共创整理、重构和扩展，形成当前的 Meridian Research Engine 2.0 首发版本。
 
-- Meridian Research Engine 2.0 naming and repository identity;
-- macro-cycle and sector-rotation workflow;
-- six-factor macro scoring;
-- market-pricing and consensus-validation checks;
-- data reliability and data meaning rules;
-- Price Level Engine / 点位精算引擎;
-- portfolio cost and execution checks;
-- report gatekeeper requirements;
-- generic public examples using SAMPLE / TICKER placeholders;
-- additional tests and GitHub Actions workflow.
+Independence notice / 独立性说明
+---------------------------------
+
+This project is not the official AI Berkshire project and is not affiliated with, endorsed by, or sponsored by xbtlin or any upstream project maintainer.
+
+It is also not an official project of any broker, investment adviser, exchange, data provider, financial institution, or company.
+
+本项目不是 AI Berkshire 官方版本，不代表 xbtlin 或上游维护者立场；也不是任何券商、投顾机构、交易所、数据服务商、金融机构或公司的官方项目。
 
 MIT License Compliance Notes
 ----------------------------
