@@ -1,6 +1,6 @@
 # Report Export / 报告导出说明
 
-Meridian Research Engine 2.0 uses Markdown as the canonical report source. Word and PDF are delivery formats.
+Meridian Research Engine 2.0 uses Markdown as the canonical report source in the `v2.0.0-beta` initial release. Word and PDF are delivery formats.
 
 Meridian Research Engine 2.0默认以 Markdown 作为标准报告源文件，Word / PDF 是交付层格式，而不是研究源文件。
 
@@ -38,7 +38,7 @@ Markdown is used as the source format because it is:
 - easier for AI agents and scripts to fill consistently;
 - safer for open-source examples because private account data can be kept out.
 
-Word and PDF exports should be generated only after the report passes the report gatekeeper.
+Word and PDF exports should be generated only after the report passes Gatekeeper v2.1.
 
 ## Chinese report workflow / 中文报告流程
 

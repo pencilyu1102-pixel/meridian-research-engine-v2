@@ -1,6 +1,6 @@
 # Architecture
 
-Meridian Research Engine 2.0 is organized as a workflow pack plus a small Python toolkit.
+Meridian Research Engine 2.0 is organized as a workflow pack plus a small Python toolkit for the `v2.0.0-beta` initial release.
 
 ## Layers
 

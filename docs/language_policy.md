@@ -1,6 +1,6 @@
 # Report Language Policy / 报告语言策略
 
-Meridian Research Engine 2.0 must generate reports in one language at a time. The final report must not mix Chinese and English section headings.
+Meridian Research Engine 2.0 `v2.0.0-beta` must generate reports in one language at a time. The final report must not mix Chinese and English section headings.
 
 Meridian Research Engine 2.0的正式报告必须根据使用者语言生成单一语言版本，不允许出现中英文标题混排。
 

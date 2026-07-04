@@ -1,6 +1,6 @@
 # Quick Start and Usage / 快速开始与使用说明
 
-This guide explains how to install, test, and run Meridian Research Engine 2.0 (经纬投研引擎 2.0) locally.
+This guide explains how to install, test, and run Meridian Research Engine 2.0 (经纬投研引擎 2.0) locally as the `v2.0.0-beta` initial release.
 
 This project is a research workflow and data-audit aid. It is not financial advice, does not execute trades, and does not provide guaranteed outcomes.
 
@@ -89,7 +89,7 @@ This calculates aggregate management cost for portfolio review. It is not tax-lo
 python tools/valuation_scenario.py --eps 10.00 --bear 12 --base 15 --bull 18
 ```
 
-### 6.5 Report gatekeeper / 报告准出检查
+### 6.5 Gatekeeper v2.1 / 报告准出检查
 
 Chinese report:
 

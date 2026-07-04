@@ -1,6 +1,6 @@
 # Methodology
 
-Meridian Research Engine 2.0 follows a fixed order:
+Meridian Research Engine 2.0 follows a fixed order in the `v2.0.0-beta` initial release:
 
 ```text
 Macro cycle
