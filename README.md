@@ -89,7 +89,7 @@ python tools/report_gatekeeper.py --file reports/SAMPLE_research_report_zh.md --
 
 报告必须根据使用者选择或输入语言生成单一语言版本，避免中英文标题混排。
 
-- 中文请求：使用中文报告模板（24 个规范二级标题）；
+- 中文请求：使用中文报告模板（25 个规范二级标题）；
 - 英文请求：使用英文报告模板（25 个规范二级标题）；
 - 用户明确指定语言时，以用户指定为准；
 - 股票代码、命令、路径、模块名、公式、引用来源可保留原文；
@@ -107,7 +107,7 @@ python tools/report_gatekeeper.py --file reports/SAMPLE_research_report_zh.md --
 
 根据报告语言选择模板：
 
-- 中文报告：[`templates/standard_research_report_zh.md`](templates/standard_research_report_zh.md)（24 个规范二级标题）
+- 中文报告：[`templates/standard_research_report_zh.md`](templates/standard_research_report_zh.md)（25 个规范二级标题）
 - 英文报告：[`templates/standard_research_report_en.md`](templates/standard_research_report_en.md)（25 个规范二级标题）
 
 标准报告必须区分四层判断：

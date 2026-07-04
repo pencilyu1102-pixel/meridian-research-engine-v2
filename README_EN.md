@@ -68,7 +68,7 @@ python tools/report_gatekeeper.py --file reports/SAMPLE_research_report_zh.md --
 
 Reports must be generated in one selected language.
 
-- Chinese user request: use the Chinese report template (24 canonical h2 sections).
+- Chinese user request: use the Chinese report template (25 canonical h2 sections).
 - English user request: use the English report template (25 canonical h2 sections).
 - Explicit language request overrides auto-detection.
 - Tickers, commands, file paths, formulas, module names, and source names may remain in their original form.
@@ -86,7 +86,7 @@ Do not fill `templates/standard_research_report.md` directly. It is only a selec
 
 Use language-specific templates:
 
-- Chinese report: [`templates/standard_research_report_zh.md`](templates/standard_research_report_zh.md) (24 canonical h2 sections)
+- Chinese report: [`templates/standard_research_report_zh.md`](templates/standard_research_report_zh.md) (25 canonical h2 sections)
 - English report: [`templates/standard_research_report_en.md`](templates/standard_research_report_en.md) (25 canonical h2 sections)
 
 A standard report must separate four layers:
@@ -141,7 +141,7 @@ PDF can be exported from Word / WPS, or generated with Pandoc if a local PDF eng
 
 Reports must be generated in one selected language.
 
-- Chinese user request: use the Chinese report template (24 canonical h2 sections).
+- Chinese user request: use the Chinese report template (25 canonical h2 sections).
 - English user request: use the English report template (25 canonical h2 sections).
 - Explicit language request overrides auto-detection.
 - Tickers, commands, file paths, formulas, module names, and source names may remain in their original form.

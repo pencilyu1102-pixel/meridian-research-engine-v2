@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.0.1-beta — CI and compliance cleanup
+
+- Fixed remaining canonical section wording inconsistencies.
+- Prevented legacy comprehensive script from being collected as pytest test function.
+- Clarified SAMPLE report gatekeeper expectations.
+- Improved comprehensive test compatibility.
+- Reviewed public/private report boundary.
+- Confirmed Gatekeeper positional and --file CLI compatibility.
+- Confirmed private-data ignore rules.
+
 ## v2.0-beta — Meridian Research Engine 2.0 initial private release（2026-07-04）
 
 ### Project initialization
@@ -46,7 +56,7 @@
 - 硬锁检查逻辑（股价/市值/财务来源缺失）
 
 ### 报告模板（v1.1）
-- 中文模板：24 个规范二级标题，含新增模块
+- 中文模板：25 个规范二级标题，含新增模块
 - 英文模板：25 个规范二级标题（含 Appendix）
 - 新增模板：决策权重表、市场定价评估、四类判断、宏观六因子评分等
 
