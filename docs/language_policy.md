@@ -16,13 +16,13 @@ Use the user's request language as the default report language.
 Examples:
 
 ```text
-按Meridian Research Engine 2.0完整分析 META
+按Meridian Research Engine 2.0完整分析 SAMPLE
 => Chinese report
 
-Run a complete Meridian Research Engine 2.0 report on META
+Run a complete Meridian Research Engine 2.0 report on SAMPLE
 => English report
 
-请用英文输出 META 完整报告
+请用英文输出 SAMPLE 完整报告
 => English report
 
 Please generate the report in Chinese

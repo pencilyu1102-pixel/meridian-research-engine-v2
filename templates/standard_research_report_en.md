@@ -1,4 +1,4 @@
-# Standard Research Report Template v1.1
+# Standard Research Report Template v2.0.0-beta
 
 > Purpose: structured research, data audit, reverse valuation, portfolio review, and repeatable investment workflow. This template is not investment advice.  
 > Usage rule: formal reports must keep all level-2 section headings. If a section is not applicable, write "Not applicable + reason" rather than deleting it.  

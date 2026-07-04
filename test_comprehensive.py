@@ -182,8 +182,8 @@ test("估值锚点个数正确", len(anchors) == 5, f"count={len(anchors)}")
 test("EPS 10x 12倍 => $120", anchors[0].price == Decimal("120.00"))
 test("EPS 10x 20倍 => $200", anchors[4].price == Decimal("200.00"))
 
-report = render_price_level_report("MSFT", "12.50", ["20", "22", "24", "26", "28", "30"])
-test("报告含ticker", "MSFT" in report)
+report = render_price_level_report("SAMPLE", "12.50", ["20", "22", "24", "26", "28", "30"])
+test("报告含ticker", "SAMPLE" in report)
 test("报告含EPS", "12.50" in report)
 test("报告含倍数表", "Multiple" in report)
 
@@ -392,9 +392,9 @@ r3 = rv(["tools/portfolio_cost.py", "examples/transactions_example.csv", "--tick
 test("portfolio_cost CLI退出码0", r3.returncode == 0)
 test("portfolio_cost CLI含剩余股数", "remaining_shares" in r3.stdout)
 
-r4 = rv(["tools/price_level_engine.py", "--eps", "10.00", "--ticker", "MSFT"])
+r4 = rv(["tools/price_level_engine.py", "--eps", "10.00", "--ticker", "SAMPLE"])
 test("price_level_engine CLI退出码0", r4.returncode == 0)
-test("price_level_engine CLI含ticker", "MSFT" in r4.stdout)
+test("price_level_engine CLI含ticker", "SAMPLE" in r4.stdout)
 
 r5 = rv(["tools/valuation_scenario.py", "--eps", "10.00", "--bear", "12", "--base", "14", "--bull", "16"])
 test("valuation_scenario CLI退出码0", r5.returncode == 0)

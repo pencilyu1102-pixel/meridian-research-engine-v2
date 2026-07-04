@@ -16,11 +16,24 @@ Thumbs.db
 .env
 .env.*
 !.env.example
-reports/private/
-data/private/
-exports/private/
 *.key
 *.pem
 *.p12
+reports/private/
+data/private/
+exports/private/
 *.csv.private
 *.xlsx.private
+
+# Generated outputs
+outputs/
+exports/
+*.log
+*.tmp
+*.bak
+
+# Generated report files
+*.docx
+*.pdf
+*.xlsx
+*.xls
