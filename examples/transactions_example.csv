@@ -1,0 +1,5 @@
+date,ticker,action,shares,price,fee
+2026-01-10,ABC,BUY,10,100,1
+2026-02-10,ABC,BUY,5,80,1
+2026-03-10,ABC,SELL,4,110,1
+2026-04-10,XYZ,BUY,8,50,1

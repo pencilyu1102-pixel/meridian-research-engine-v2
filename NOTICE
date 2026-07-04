@@ -1,0 +1,67 @@
+# Meridian Research Engine 2.0
+Copyright (c) 2026 xbtlin
+Copyright (c) 2026 Meridian Research Engine contributors
+
+This project is maintained as an independent open-source derivative project by the current repository owner.
+It is not the official AI Berkshire project and is not affiliated with, endorsed by, or sponsored by xbtlin or any upstream project maintainer.
+It is also not an official project of any company, institution, broker, exchange, or data provider.
+
+Intermediate working base / 中间工作基础
+----------------------------------------
+
+This derivative project was developed using the following intermediate working base:
+
+- Intermediate project: topgunsyang-dotcom/argus-research-engine
+- Current derivative: pencilyu1102-pixel/meridian-research-engine-v2
+
+本衍生项目使用了以下中间工作基础进行开发：
+- 中间项目：topgunsyang-dotcom/argus-research-engine
+- 当前衍生项目：pencilyu1102-pixel/meridian-research-engine-v2
+
+Attribution / 来源说明
+----------------------
+
+This project is based in part on the following MIT-licensed upstream project:
+
+- Original project name: AI Berkshire
+- Original repository: https://github.com/xbtlin/ai-berkshire
+- Original author / organization: xbtlin
+- Original license: MIT License
+- Original copyright notice: Copyright (c) 2026 xbtlin
+
+The upstream project README describes AI Berkshire as an investment research Skill collection compatible with Claude Code and Codex, systematizing value-investing methods through AI Agent workflows.
+
+Meridian Research Engine 2.0 is a derivative and substantially reorganized project focused on macro-cycle analysis, sector rotation, data audit, report gatekeeping, price-level mapping, portfolio-execution checks, and conservative research workflow discipline.
+
+Modification summary
+--------------------
+
+Compared with the upstream AI Berkshire project, this repository has been adapted and extended toward:
+
+- Meridian Research Engine 2.0 naming and repository identity;
+- macro-cycle and sector-rotation workflow;
+- six-factor macro scoring;
+- market-pricing and consensus-validation checks;
+- data reliability and data meaning rules;
+- Price Level Engine / 点位精算引擎;
+- portfolio cost and execution checks;
+- report gatekeeper requirements;
+- generic public examples using SAMPLE / TICKER placeholders;
+- additional tests and GitHub Actions workflow.
+
+MIT License Compliance Notes
+----------------------------
+
+The MIT License allows use, copy, modification, merging, publishing, distribution, sublicensing, and sale of copies of the software, provided that the copyright notice and permission notice are included in all copies or substantial portions of the software.
+
+The upstream copyright notice and MIT permission notice must be retained in copies or substantial portions of this software. New copyright notices for Meridian Research Engine contributors are added alongside, not in place of, the upstream notice.
+
+Trademark / Brand Notice
+------------------------
+
+AI Berkshire, any upstream logos, screenshots, names, or marks remain the property of their respective owners. This repository must not imply official endorsement, affiliation, or sponsorship by the upstream author or project.
+
+Financial Disclaimer
+--------------------
+
+This software is a research workflow and data-audit aid. It is not financial advice, does not provide investment recommendations, does not execute trades, and does not guarantee investment outcomes.
