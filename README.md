@@ -45,6 +45,16 @@ Meridian Research Engine 2.0（经纬投研引擎 2.0）是一套面向个人投
 
 公开仓库不会展示真实个股持仓、真实成本、真实价格区间或真实操作建议。示例均使用 `SAMPLE`、`TICKER`、`ABC` 等虚拟标识。
 
+## Case Study Boundary / 案例边界
+
+Public examples in this repository use generic identifiers such as SAMPLE, TICKER, or ABC.
+
+公开展示样例仅使用 `SAMPLE`、`TICKER` 或 `ABC` 等虚拟标识。
+
+Company-specific historical reports, if retained, are stored only under `reports/archive_nonpublic/` for internal process review and framework validation. They are not public sample reports and must not be treated as investment advice, trading recommendations, target-price guidance, or model endorsements.
+
+如保留具体公司历史报告，仅存放在 `reports/archive_nonpublic/`，用于内部流程复盘和框架校验。它们不是公开样例，不构成投资建议、交易推荐、目标价指引或模型背书。
+
 ---
 
 ## 快速开始

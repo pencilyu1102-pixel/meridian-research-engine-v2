@@ -38,6 +38,16 @@ This project is not suitable for:
 
 Public examples must use generic identifiers such as `SAMPLE`, `TICKER`, or `ABC`. Do not publish real account screenshots, private cost basis, private transaction records, or real personal position details.
 
+## Case Study Boundary / 案例边界
+
+Public examples in this repository use generic identifiers such as SAMPLE, TICKER, or ABC.
+
+公开展示样例仅使用 `SAMPLE`、`TICKER` 或 `ABC` 等虚拟标识。
+
+Company-specific historical reports, if retained, are stored only under `reports/archive_nonpublic/` for internal process review and framework validation. They are not public sample reports and must not be treated as investment advice, trading recommendations, target-price guidance, or model endorsements.
+
+如保留具体公司历史报告，仅存放在 `reports/archive_nonpublic/`，用于内部流程复盘和框架校验。它们不是公开样例，不构成投资建议、交易推荐、目标价指引或模型背书。
+
 ---
 
 ## Quick start
