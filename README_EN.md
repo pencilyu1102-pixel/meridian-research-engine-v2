@@ -7,7 +7,9 @@ Chinese name: 经纬投研引擎 2.0
 Initial release: v2.0.0-beta  
 Repository: `pencilyu1102-pixel/meridian-research-engine-v2`
 
-> An AI-assisted global equity buy-side research framework integrating market adapters, industry adapters, fundamental driver models, competition share models, implied expectation reverse-engineering, and falsification-backed decision-making, all validated by the Gatekeeper v2.1 release-quality system.
+Meridian Research Engine 2.0｜经纬投研引擎 2.0 is a global equity buy-side research framework for individual investors and researchers. It does not predict stock prices, generate buy/sell signals, or replace investment decisions. Instead, it helps users make research judgments more disciplined, auditable, falsifiable, and reviewable.
+
+The project centers on macro-cycle analysis, sector rotation, data audit, fundamental drivers, competition share analysis, implied-expectation reverse-engineering, bear-case reasoning, and Gatekeeper release checks, and is designed for structured research workflows across US, A-share, Hong Kong, and other global markets.
 
 ### Core Design Philosophy (v2.0.0-beta initial release)
 
