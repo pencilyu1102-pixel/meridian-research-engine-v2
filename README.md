@@ -1,58 +1,70 @@
 # Meridian Research Engine 2.0｜经纬投研引擎 2.0
 
-English version: [README_EN.md](README_EN.md)
+Meridian Research Engine 2.0｜经纬投研引擎 2.0 是一个本地运行的 AI 投研审计与研究准出引擎，也是面向个人投资者和研究者的全球股票通用买方研究框架。
 
-项目英文名：Meridian Research Engine 2.0  
-中文名：经纬投研引擎 2.0  
-首发版本：v2.0.0-beta  
-GitHub 仓库：`pencilyu1102-pixel/meridian-research-engine-v2`  
-仓库目录名：`meridian-research-engine-v2`
+它不是 AI 荐股系统，不预测股价，不输出买卖信号，也不替代投资决策。
 
-Meridian Research Engine 2.0｜经纬投研引擎 2.0 是一套面向个人投资者和研究者的全球股票通用买方研究框架，不预测股价、不输出买卖信号、不替代投资决策，而是帮助使用者把投研判断变得更有纪律、更可审计、更可证伪、更可复盘。
+它解决的是另一个问题：
 
-项目以宏观周期、板块轮动、数据审计、基本面驱动、竞争份额、隐含预期反推、反向论证与 Gatekeeper 准出校验为核心，适用于美股、A 股、港股及其他全球市场的结构化研究流程。
+> 当 AI 给出一个看似完整的投资观点时，如何确认它的数据、假设、估值、反方证据、仓位约束和复盘条件是否真的成立？
 
-### 核心设计思想（v2.0.0-beta 首发版本）
-
-1. 以**数据校验**为底座；
-2. 以**基本面驱动模型**（收入/毛利率/费用/现金流/ROIC 五棵驱动树）和**竞争份额模型**（TAM/SAM/SOM）为核心；
-3. 以**市场隐含预期反推**（当前价格隐含的CAGR、利润率、份额、倍数）为估值框架；
-4. 以**反向论证**和**证伪框架**（阈值 + 数据来源 + 触发动作）构成决策闭环；
-5. **不预测股价**，而是反推当前价格隐含的增长、利润率、份额和估值假设；
-6. 不把所有公司套用同一估值方法，而是根据**市场适配器**（美/中/港/全球）和**行业适配器**（8 种行业模型）选择分析框架；
-7. 所有报告必须通过 **Gatekeeper v2.1 准出校验**（三层检查 + 三档准出 + 25 规范章节），防止数据不完整的报告被交付。
-
-它不是荐股系统，不自动交易，不提供固定买卖点位，也不承诺收益。它的目标是让 AI 的分析更有纪律、更可审计、更可反驳、更适合复盘。
+项目以宏观周期、板块轮动、数据审计、基本面驱动、竞争份额、隐含预期反推、反向论证与 Gatekeeper 准出校验为核心，把一篇 AI 投研报告从"看起来有道理"推进到"可以被审计、可以被反驳、可以被复盘"。
 
 ---
 
-## 重要声明
+## 这不是一个 AI 荐股系统
 
-本项目不是投资建议，不构成买卖推荐，不自动交易，不预测股价，不承诺收益。
+本项目不做以下事情：
 
-所有输出都只是研究流程、数据审计和决策辅助材料。任何投资决策都需要使用者自行判断并承担风险。
+- 不预测短期股价；
+- 不输出买入 / 卖出信号；
+- 不自动交易；
+- 不承诺收益；
+- 不替代使用者自己的投资判断；
+- 不在公开仓库展示真实持仓、真实成本、真实价格区间或真实操作建议。
 
-本项目不适合用于：
+它关注的是研究流程本身：
 
-- 自动下单；
-- 短线交易信号；
-- 替代个人判断；
-- 预测股价；
-- 承诺收益；
-- 根据单一指标直接买卖；
-- 把 AI 输出当作最终结论。
+```text
+数据是否可靠？
+假设是否清楚？
+估值是否可解释？
+反方证据是否充分？
+账户动作是否被过早输出？
+结论是否具备复盘条件？
+```
 
-公开仓库不会展示真实个股持仓、真实成本、真实价格区间或真实操作建议。示例均使用 `SAMPLE`、`TICKER`、`ABC` 等虚拟标识。
+---
 
-## Case Study Boundary / 案例边界
+## Demo：研究准出仪表盘
 
-Public examples in this repository use generic identifiers such as SAMPLE, TICKER, or ABC.
+经纬投研引擎不会直接输出"买入 / 卖出 / 目标价"作为最终结论，而是先判断一份研究报告是否具备正式准出条件。
 
-公开展示样例仅使用 `SAMPLE`、`TICKER` 或 `ABC` 等虚拟标识。
+示例：
 
-Company-specific historical reports are not included in this public repository. All public examples use `SAMPLE`, `TICKER`, or `ABC` generic identifiers and do not constitute investment advice, trading recommendations, target-price guidance, or model endorsements.
+- [`reports/SAMPLE_research_dashboard_zh.md`](reports/SAMPLE_research_dashboard_zh.md)
+- [`reports/SAMPLE_research_report_zh.md`](reports/SAMPLE_research_report_zh.md)
 
-公开仓库不包含任何具体公司历史投研报告。所有公开展示例均使用 `SAMPLE`、`TICKER` 或 `ABC` 等虚拟标识，不构成投资建议、交易推荐、目标价指引或模型背书。
+核心区别：
+
+```text
+普通 AI 股票分析：直接给结论。
+经纬投研引擎：先检查结论是否有资格被交付。
+```
+
+---
+
+## 版本信息
+
+| 项目 | 内容 |
+|---|---|
+| 项目英文名 | Meridian Research Engine 2.0 |
+| 中文名 | 经纬投研引擎 2.0 |
+| 当前版本 | v2.0.1-beta |
+| 首发版本 | v2.0.0-beta |
+| 仓库 | pencilyu1102-pixel/meridian-research-engine-v2 |
+
+English version: [README_EN.md](README_EN.md)
 
 ---
 
@@ -140,6 +152,8 @@ python tools/report_gatekeeper.py --file reports/SAMPLE_research_report_zh.md --
 ## Gatekeeper v2.1 — 报告准出校验
 
 `tools/report_gatekeeper.py` 是Meridian Research Engine 2.0的**内容级准出校验系统**，在报告交付前自动检查章节存在性、语言合规性和内容深度。
+
+Gatekeeper v2.1 是本项目区别于普通 AI 股票分析工具的核心模块：它不负责让结论更漂亮，而是负责阻止不合格的报告被交付。
 
 ### 三层架构
 

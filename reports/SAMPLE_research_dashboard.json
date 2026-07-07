@@ -1,0 +1,55 @@
+{
+  "ticker": "SAMPLE",
+  "market": "US",
+  "industry": "Software",
+  "report_type": "stock_research",
+  "language": "zh",
+  "report_status": "CORE_PASS_TEMPLATE_FAIL",
+  "portfolio_action": "LOCKED_NO_ACCOUNT_ACTION",
+  "not_investment_advice": true,
+  "judgments": {
+    "company_judgment": {
+      "status": "PASS",
+      "summary": "基本面具备继续研究价值，但仍需结合后续数据验证"
+    },
+    "valuation_judgment": {
+      "status": "CONDITIONAL_PASS",
+      "summary": "当前估值判断依赖增长假设，需要结合最新价格和财务数据继续校验"
+    },
+    "portfolio_judgment": {
+      "status": "LOCKED",
+      "summary": "缺少真实持仓、成本、现金和风险承受信息，不输出账户动作"
+    },
+    "review_judgment": {
+      "status": "PASS",
+      "summary": "已设置下次复盘变量和失效条件"
+    }
+  },
+  "gatekeeper": {
+    "market_adapter": "PASS",
+    "industry_adapter": "PASS",
+    "fundamental_driver_model": "PASS",
+    "competition_share_model": "PASS",
+    "implied_expectation": "CONDITIONAL_PASS",
+    "data_sources": "CONDITIONAL_PASS",
+    "bear_case": "PASS",
+    "falsification_framework": "PASS",
+    "risk_thresholds": "CONDITIONAL_PASS",
+    "portfolio_action": "LOCKED"
+  },
+  "review_triggers": [
+    "下一次财报后复盘收入增速、利润率和现金流转化",
+    "若核心数据缺失、过期或来源不明，报告自动降级",
+    "若 Bear Case 被关键数据验证，原结论需要重审",
+    "若没有真实账户信息，禁止输出账户级动作",
+    "若估值假设无法被数据支持，禁止输出积极结论"
+  ],
+  "public_sample_boundary": {
+    "uses_real_company": false,
+    "uses_real_position": false,
+    "uses_real_cost": false,
+    "uses_real_price_level": false,
+    "contains_buy_sell_signal": false,
+    "contains_target_price": false
+  }
+}
