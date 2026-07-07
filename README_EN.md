@@ -1,14 +1,14 @@
 # Meridian Research Engine 2.0
 
-**A local AI equity research audit and report-gatekeeping engine.**
+Meridian Research Engine 2.0 is a local AI equity research audit and report-gatekeeping engine, as well as a global equity buy-side research framework for individual investors and researchers.
 
-This is not an AI stock-picking system. It does not predict stock prices, generate buy/sell signals, automate trading, or replace the user's own investment judgment.
+It is not an AI stock-picking system. It does not predict stock prices, generate buy/sell signals, automate trading, or replace the user's own investment judgment.
 
 It focuses on a different question:
 
 > When an AI-generated investment view looks complete, how do we verify whether its data, assumptions, valuation logic, bear-case evidence, portfolio constraints, and review triggers actually hold?
 
-Meridian Research Engine 2.0 uses macro-cycle analysis, sector rotation, data auditing, fundamental driver models, competition and share modeling, implied-expectation reverse engineering, Bear Case analysis, and Gatekeeper checks to turn an AI research report from "seemingly reasonable" into "auditable, falsifiable, and reviewable."
+The project is built around macro-cycle analysis, sector rotation, data auditing, fundamental driver models, competition and share modeling, implied-expectation reverse engineering, Bear Case analysis, and Gatekeeper checks. Its goal is to turn an AI research report from "seemingly reasonable" into "auditable, falsifiable, and reviewable."
 
 ---
 
