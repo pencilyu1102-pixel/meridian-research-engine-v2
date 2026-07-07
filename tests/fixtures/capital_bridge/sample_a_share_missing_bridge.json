@@ -1,0 +1,11 @@
+{
+  "market": "A_SHARE",
+  "fields_present": ["current_price", "market_cap", "eps", "pe", "shares"],
+  "current_price": "23.50",
+  "market_cap": "2350000000",
+  "eps": "1.20",
+  "pe": "19.58",
+  "shares": "100000000",
+  "bridge_completed": false,
+  "ticker": "SAMPLE_CN_GROWTH"
+}

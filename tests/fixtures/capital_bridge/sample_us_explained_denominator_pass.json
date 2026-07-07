@@ -1,0 +1,13 @@
+{
+  "market": "US_STOCK",
+  "fields_present": ["current_price", "eps", "pe", "current_shares", "weighted_diluted_shares"],
+  "current_price": "100.00",
+  "eps": "5.00",
+  "pe": "25.00",
+  "pe_tolerance_pct": "0.30",
+  "current_shares": "10000000",
+  "weighted_diluted_shares": "9800000",
+  "share_basis_usage_explanation": "current shares for market cap, weighted diluted shares for trailing EPS denominator",
+  "denominator_explanation": "synthetic non-comparable denominator explanation",
+  "ticker": "SAMPLE_US_HEALTH"
+}

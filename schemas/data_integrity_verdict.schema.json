@@ -16,7 +16,8 @@
         "FAIL_EARNINGS_BASIS",
         "FAIL_CAPITAL_BRIDGE",
         "FAIL_INDUSTRY_HARD_FIELDS",
-        "FAIL_SOURCE_PERMISSION"
+        "FAIL_SOURCE_PERMISSION",
+        "FAIL_DATA_HARDLOCK"
       ]
     },
     "violations": {

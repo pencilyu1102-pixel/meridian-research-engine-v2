@@ -1,0 +1,8 @@
+{
+  "data_card": {"status": "PASS_FORMAL", "violations": []},
+  "earnings_basis": {
+    "status": "FAIL_EARNINGS_BASIS",
+    "violations": ["guidance EPS cannot be used as trailing EPS"]
+  },
+  "capital_bridge": {"status": "PASS_FORMAL", "violations": []}
+}

@@ -1,0 +1,7 @@
+{
+  "market": "US_STOCK",
+  "fields_present": ["current_shares", "weighted_diluted_shares"],
+  "current_shares": "10000000",
+  "weighted_diluted_shares": "9800000",
+  "ticker": "SAMPLE_US_HEALTH"
+}
