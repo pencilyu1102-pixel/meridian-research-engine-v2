@@ -1,0 +1,9 @@
+{
+  "market": "US_STOCK",
+  "fields_present": ["current_price", "eps", "pe"],
+  "current_price": "100.00",
+  "eps": "5.00",
+  "pe": "25.00",
+  "pe_tolerance_pct": "0.05",
+  "ticker": "SAMPLE_US_HEALTH"
+}

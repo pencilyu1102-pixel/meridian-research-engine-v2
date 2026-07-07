@@ -1,0 +1,13 @@
+{
+  "market": "A_SHARE",
+  "fields_present": ["current_price", "market_cap", "eps", "pe", "shares"],
+  "current_price": "18.00",
+  "market_cap": "1800000000",
+  "eps": "0.90",
+  "pe": "20.00",
+  "shares": "100000000",
+  "bridge_completed": true,
+  "corporate_actions": ["bonus_issue", "secondary_offering", "buyback", "stock_split"],
+  "bridge_notes": "Synthetic bridge completed",
+  "ticker": "SAMPLE_CN_GROWTH"
+}

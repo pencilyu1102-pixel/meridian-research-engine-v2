@@ -1,0 +1,14 @@
+{
+  "data_card": {
+    "status": "FAIL_DATA_CARD_MISSING",
+    "violations": ["missing required field: source"]
+  },
+  "earnings_basis": {
+    "status": "FAIL_EARNINGS_BASIS",
+    "violations": ["guidance EPS cannot be used as trailing EPS"]
+  },
+  "capital_bridge": {
+    "status": "FAIL_CAPITAL_BRIDGE",
+    "violations": ["market cap closure exceeds tolerance"]
+  }
+}

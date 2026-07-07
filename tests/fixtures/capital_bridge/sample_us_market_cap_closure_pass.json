@@ -1,0 +1,9 @@
+{
+  "market": "US_STOCK",
+  "fields_present": ["current_price", "market_cap", "current_shares"],
+  "current_price": "100.00",
+  "market_cap": "1005000000",
+  "current_shares": "10000000",
+  "market_cap_tolerance_pct": "0.01",
+  "ticker": "SAMPLE_US_HEALTH"
+}

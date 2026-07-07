@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://meridian-research-engine-v2/schemas/capital_structure_bridge.schema.json",
+  "title": "Capital Structure Bridge",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["market", "fields_present"],
+  "properties": {
+    "market": {"type": "string", "enum": ["A_SHARE", "US_STOCK"]},
+    "fields_present": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "current_price",
+          "market_cap",
+          "eps",
+          "pe",
+          "shares",
+          "current_shares",
+          "weighted_basic_shares",
+          "weighted_diluted_shares"
+        ]
+      }
+    },
+    "bridge_completed": {"type": "boolean"},
+    "corporate_actions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["bonus_issue", "secondary_offering", "buyback", "stock_split"]
+      }
+    },
+    "market_cap_tolerance_pct": {"type": "number"},
+    "pe_tolerance_pct": {"type": "number"},
+    "denominator_explanation": {"type": "string"},
+    "share_basis_usage_explanation": {"type": "string"}
+  }
+}

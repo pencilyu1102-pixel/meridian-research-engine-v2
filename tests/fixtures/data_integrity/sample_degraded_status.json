@@ -1,0 +1,8 @@
+{
+  "data_card": {"status": "PASS_FORMAL", "violations": []},
+  "earnings_basis": {
+    "status": "CALC_ONLY_NOT_FOR_CONCLUSION",
+    "violations": ["valuation input lacks metadata"]
+  },
+  "capital_bridge": {"status": "PASS_FORMAL", "violations": []}
+}
