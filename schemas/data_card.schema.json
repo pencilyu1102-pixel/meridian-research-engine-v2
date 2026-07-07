@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://meridian-research-engine-v2/schemas/data_card.schema.json",
+  "title": "Data Card",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "field_name",
+    "value",
+    "source",
+    "source_tier",
+    "timestamp",
+    "period",
+    "unit",
+    "currency",
+    "accounting_basis",
+    "can_enter_conclusion",
+    "notes"
+  ],
+  "properties": {
+    "field_name": {"type": "string", "minLength": 1},
+    "value": {},
+    "source": {"type": "string", "minLength": 1},
+    "source_tier": {"type": "string", "enum": ["A", "B", "C", "D"]},
+    "timestamp": {"type": "string", "minLength": 1},
+    "period": {"type": "string", "minLength": 1},
+    "unit": {"type": "string"},
+    "currency": {"type": "string"},
+    "accounting_basis": {"type": "string", "minLength": 1},
+    "can_enter_conclusion": {
+      "type": "string",
+      "enum": ["full", "reference_only", "blocked"]
+    },
+    "notes": {"type": "string"}
+  }
+}

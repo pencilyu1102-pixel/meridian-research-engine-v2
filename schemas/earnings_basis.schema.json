@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://meridian-research-engine-v2/schemas/earnings_basis.schema.json",
+  "title": "Earnings Basis Classification",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["basis"],
+  "properties": {
+    "basis": {
+      "type": "string",
+      "enum": [
+        "gaap_actual",
+        "non_gaap_adjusted_actual",
+        "management_guidance",
+        "consensus_estimate",
+        "aggregator_field"
+      ]
+    },
+    "usage_context": {
+      "type": "string",
+      "enum": [
+        "background",
+        "conclusion",
+        "core_valuation",
+        "trailing_eps",
+        "forward_valuation"
+      ]
+    },
+    "explicit_approval": {"type": "boolean"},
+    "verified": {"type": "boolean"},
+    "has_gaap_anchor": {"type": "boolean"}
+  }
+}

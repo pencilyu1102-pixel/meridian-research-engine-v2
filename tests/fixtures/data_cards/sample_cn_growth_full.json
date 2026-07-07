@@ -1,0 +1,15 @@
+[
+  {
+    "field_name": "sample_cn_growth_ttm_eps",
+    "value": 4.32,
+    "source": "SAMPLE_CN_GROWTH annual filing",
+    "source_tier": "A",
+    "timestamp": "2026-07-07T00:00:00Z",
+    "period": "FY2025",
+    "unit": "CNY/share",
+    "currency": "CNY",
+    "accounting_basis": "gaap_actual",
+    "can_enter_conclusion": "full",
+    "notes": "Synthetic sample for unit tests only"
+  }
+]

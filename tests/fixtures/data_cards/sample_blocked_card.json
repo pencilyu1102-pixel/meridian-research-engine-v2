@@ -1,0 +1,15 @@
+[
+  {
+    "field_name": "sample_background_metric",
+    "value": 1,
+    "source": "SAMPLE_US_HEALTH investor note",
+    "source_tier": "B",
+    "timestamp": "2026-07-07T00:00:00Z",
+    "period": "2026Q1",
+    "unit": "ratio",
+    "currency": "N/A",
+    "accounting_basis": "reference_metric",
+    "can_enter_conclusion": "blocked",
+    "notes": "Blocked sample for permission test"
+  }
+]
