@@ -5,9 +5,10 @@ Three-mode, three-gate architecture with structured status output.
 from __future__ import annotations
 
 import argparse
+import json
 import re
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any, Mapping, Sequence
 
 try:
     from .contradiction_hunter import find_banned_phrases
@@ -308,7 +309,10 @@ def check_core_quality(text: str, lang: str, mode: str) -> dict[str, Any]:
 # ── Main check ─────────────────────────────────────────────────────────
 
 def check_report(
-    text: str, mode: str = "formal", language: str = "auto"
+    text: str,
+    mode: str = "formal",
+    language: str = "auto",
+    hardlock_verdict: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Multi-mode, multi-gate report check.
 
@@ -325,8 +329,8 @@ def check_report(
     else:
         lang = language
 
-    # Hardlock Gate — always run
-    hardlock = check_hardlock(text)
+    # Legacy text hardlock / structure sanity gate — always run
+    legacy_hardlock = check_hardlock(text)
 
     # Template Gate — only in formal mode
     template: dict[str, Any] = {"status": "SKIPPED", "missing_sections": [], "details": "mode != formal"}
@@ -337,36 +341,56 @@ def check_report(
     core_quality = check_core_quality(text, lang, mode)
 
     # ── Determine final status ──
-    hardlock_fail = hardlock["status"] == "FAIL"
+    hardlock_fail = legacy_hardlock["status"] == "FAIL"
     template_fail = template["status"] != "PASS"
     core_fail = core_quality["status"] in ("FAIL_CONTENT_DEPTH",)
 
     if hardlock_fail:
-        final_status = "FAIL_DATA_HARDLOCK"
-        release_grade = "不可准出"
+        structure_status = "FAIL_DATA_HARDLOCK"
+        structure_release_grade = "不可准出"
     elif mode == "formal" and template_fail:
-        final_status = "CORE_PASS_TEMPLATE_FAIL"
-        release_grade = "条件准出"
+        structure_status = "CORE_PASS_TEMPLATE_FAIL"
+        structure_release_grade = "条件准出"
     elif core_fail:
-        final_status = "FAIL_CONTENT_DEPTH"
-        release_grade = "条件准出"
+        structure_status = "FAIL_CONTENT_DEPTH"
+        structure_release_grade = "条件准出"
     elif core_quality["status"] == "CONDITIONAL_PASS":
-        final_status = "CONDITIONAL_PASS"
-        release_grade = "条件准出"
+        structure_status = "CONDITIONAL_PASS"
+        structure_release_grade = "条件准出"
     else:
-        final_status = "FULL_PASS"
-        release_grade = "可准出"
+        structure_status = "FULL_PASS"
+        structure_release_grade = "结构通过"
 
-    can_formal = (
-        final_status == "FULL_PASS" or
-        (final_status == "CONDITIONAL_PASS" and mode == "formal")
-    )
-    can_test = final_status not in ("FAIL_DATA_HARDLOCK",)
+    external_hardlock_status = "PASS_TEST_ONLY"
+    external_hardlock_violations: list[str] = []
+    if hardlock_verdict is not None:
+        external_hardlock_status = str(hardlock_verdict.get("status", "FAIL_DATA_HARDLOCK"))
+        external_hardlock_violations = [str(item) for item in hardlock_verdict.get("violations", [])]
+
+    if structure_status != "FULL_PASS":
+        final_status = structure_status
+        release_decision = "不可准出" if structure_status == "FAIL_DATA_HARDLOCK" else "条件准出"
+        failure_family = "FAIL_DATA_HARDLOCK" if structure_status == "FAIL_DATA_HARDLOCK" else "STRUCTURE_QUALITY"
+    elif hardlock_verdict is None:
+        final_status = "PASS_TEST_ONLY"
+        release_decision = "不可准出"
+        failure_family = "FAIL_DATA_HARDLOCK"
+    elif external_hardlock_status == "PASS_FORMAL":
+        final_status = "FULL_PASS"
+        release_decision = "可准出"
+        failure_family = ""
+    else:
+        final_status = "FAIL_DATA_HARDLOCK"
+        release_decision = "不可准出"
+        failure_family = "FAIL_DATA_HARDLOCK"
+
+    can_formal = final_status == "FULL_PASS"
+    can_test = final_status in ("FULL_PASS", "PASS_TEST_ONLY", "CONDITIONAL_PASS", "CORE_PASS_TEMPLATE_FAIL")
 
     # Build required fixes
     fixes: list[str] = []
     if hardlock_fail:
-        for detail in hardlock["details"]:
+        for detail in legacy_hardlock["details"]:
             if detail == "missing_price":
                 fixes.append("补充最新股价")
             elif detail == "missing_market_cap":
@@ -380,14 +404,24 @@ def check_report(
     if core_fail:
         fixes.append("补充缺失的核心模块：")
         fixes.extend(f"  - {m}" for m in core_quality.get("missing_modules", []))
+    if hardlock_verdict is None and structure_status == "FULL_PASS":
+        fixes.append("补充外部 Data Integrity Hardlock verdict 后再申请正式准出")
+    elif hardlock_verdict is not None and external_hardlock_status != "PASS_FORMAL":
+        fixes.extend(f"hardlock: {item}" for item in external_hardlock_violations)
 
     return {
         "final_status": final_status,
-        "release_grade": release_grade,
-        "hardlock_gate": hardlock["status"],
+        "release_grade": release_decision,
+        "release_decision": release_decision,
+        "structure_status": structure_status,
+        "hardlock_status": external_hardlock_status,
+        "structure_release_grade": structure_release_grade,
+        "failure_family": failure_family,
+        "hardlock_gate": external_hardlock_status,
+        "legacy_data_gate": legacy_hardlock["status"],
         "template_gate": template["status"],
         "core_quality_gate": core_quality["status"],
-        "failure_type": hardlock["failure_type"] if hardlock_fail else ("template_compliance" if template_fail and mode == "formal" else "content_depth"),
+        "failure_type": legacy_hardlock["failure_type"] if hardlock_fail else ("template_compliance" if template_fail and mode == "formal" else "content_depth"),
         "can_be_used_as_formal_report": can_formal,
         "can_be_used_as_framework_test": can_test,
         "required_fixes": fixes,
@@ -402,7 +436,12 @@ def render_result(r: dict[str, Any]) -> str:
         "gatekeeper_result:",
         f"  final_status: {r['final_status']}",
         f"  release_grade: {r['release_grade']}",
+        f"  release_decision: {r['release_decision']}",
+        f"  structure_status: {r['structure_status']}",
+        f"  hardlock_status: {r['hardlock_status']}",
+        f"  failure_family: {r['failure_family']}",
         f"  hardlock_gate: {r['hardlock_gate']}",
+        f"  legacy_data_gate: {r['legacy_data_gate']}",
         f"  template_gate: {r['template_gate']}",
         f"  core_quality_gate: {r['core_quality_gate']}",
         f"  failure_type: {r['failure_type']}",
@@ -431,7 +470,7 @@ def check_report_text(text: str, language: str = "zh") -> dict[str, Any]:
     result = check_report(text, mode="formal", language=language)
     banned = find_banned_phrases(text)
     return {
-        "passed": result["final_status"] in ("FULL_PASS", "CONDITIONAL_PASS"),
+        "passed": result["can_be_used_as_formal_report"],
         "missing_sections": result.get("required_fixes", []),
         "banned_phrases": banned,
         "raw_result": result,
@@ -479,13 +518,17 @@ def main() -> None:
         choices=("auto", "zh", "en"),
         default="auto",
     )
+    parser.add_argument("--hardlock-file", default=None, help="Path to JSON hardlock verdict")
     args = parser.parse_args()
 
     file_path = args.file or args.path
     if file_path is None:
         parser.error("report path is required (positional or --file)")
     text = Path(file_path).read_text(encoding="utf-8")
-    result = check_report(text, mode=args.mode, language=args.language)
+    hardlock_verdict = None
+    if args.hardlock_file:
+        hardlock_verdict = json.loads(Path(args.hardlock_file).read_text(encoding="utf-8"))
+    result = check_report(text, mode=args.mode, language=args.language, hardlock_verdict=hardlock_verdict)
     print(render_result(result))
 
 

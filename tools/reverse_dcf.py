@@ -37,7 +37,12 @@ from __future__ import annotations
 
 import argparse
 import sys
-from typing import Optional
+from typing import Any, Mapping, Optional
+
+try:
+    from .tool_metadata_guard import evaluate_tool_metadata, render_metadata_block
+except ImportError:  # pragma: no cover - allows direct CLI execution
+    from tool_metadata_guard import evaluate_tool_metadata, render_metadata_block
 
 
 # ── Helpers ──────────────────────────────────────────────────────────
@@ -189,6 +194,7 @@ def build_output(
     reported_fcf_margin: Optional[float],
     cagr_note: Optional[str],
     margin_note: Optional[str],
+    metadata: Mapping[str, Any] | None = None,
 ) -> str:
     """Build the full Markdown output table."""
     lines = [
@@ -273,6 +279,8 @@ def build_output(
         lines.append("|------|-----------|-----------|------|")
         lines.extend(diffs)
 
+    lines.append("")
+    lines.append(render_metadata_block(evaluate_tool_metadata(metadata)))
     lines.append("")
     return "\n".join(lines)
 
@@ -391,6 +399,14 @@ def main() -> None:
             "(e.g. 0.20 for 20%%)"
         ),
     )
+    parser.add_argument("--basis", default=None, help="Data basis, e.g. gaap_actual")
+    parser.add_argument("--period", default=None, help="Data period, e.g. TTM or FY2025")
+    parser.add_argument("--source-tier", default=None, help="Source tier, one of A/B/C/D")
+    parser.add_argument(
+        "--can-enter-conclusion",
+        default=None,
+        help="Conclusion permission: full/reference_only/blocked",
+    )
 
     args = parser.parse_args()
 
@@ -505,6 +521,12 @@ def main() -> None:
         args.reported_fcf_margin,
         cagr_note,
         margin_note,
+        metadata={
+            "basis": args.basis,
+            "period": args.period,
+            "source_tier": args.source_tier,
+            "can_enter_conclusion": args.can_enter_conclusion,
+        },
     )
     print(output)
 

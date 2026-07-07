@@ -9,12 +9,14 @@ from __future__ import annotations
 import argparse
 from dataclasses import dataclass
 from decimal import Decimal
-from typing import Iterable, Sequence
+from typing import Any, Iterable, Mapping, Sequence
 
 try:
     from .financial_rigor import calculate_price_from_multiple, format_decimal, to_decimal
+    from .tool_metadata_guard import ToolMetadataVerdict, evaluate_tool_metadata, render_metadata_block
 except ImportError:  # pragma: no cover - allows direct CLI execution
     from financial_rigor import calculate_price_from_multiple, format_decimal, to_decimal
+    from tool_metadata_guard import ToolMetadataVerdict, evaluate_tool_metadata, render_metadata_block
 
 
 DEFAULT_MULTIPLES: tuple[str, ...] = (
@@ -91,23 +93,25 @@ def render_price_level_report(
     ticker: str,
     normalized_eps: Decimal | int | str,
     multiples: Iterable[Decimal | int | str] | None = None,
+    metadata: Mapping[str, Any] | None = None,
 ) -> str:
     """Render a Markdown report for the Price Level Engine."""
 
     eps = to_decimal(normalized_eps, "normalized_eps")
     anchors = build_valuation_anchor_table(eps, multiples)
-    return "\n".join(
-        [
-            f"Ticker: {ticker.upper()}",
-            f"Normalized EPS: {eps}",
-            "",
-            "## Valuation Anchor Table",
-            "",
-            format_anchor_table(anchors),
-            "",
-            "> Research map only. This is not financial advice and not a buy/sell signal.",
-        ]
-    )
+    metadata_verdict: ToolMetadataVerdict = evaluate_tool_metadata(metadata)
+    lines = [
+        f"Ticker: {ticker.upper()}",
+        f"Normalized EPS: {eps}",
+        "",
+        "## Valuation Anchor Table",
+        "",
+        format_anchor_table(anchors),
+        "",
+        "> Research map only. This is not financial advice and not a buy/sell signal.",
+        render_metadata_block(metadata_verdict),
+    ]
+    return "\n".join(lines)
 
 
 def build_arg_parser() -> argparse.ArgumentParser:
@@ -118,6 +122,10 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "--multiples",
         help="Comma-separated valuation multiples, for example 16,16.5,17,18,19,20,22",
     )
+    parser.add_argument("--basis", help="Data basis, e.g. gaap_actual")
+    parser.add_argument("--period", help="Data period, e.g. TTM or FY2025")
+    parser.add_argument("--source-tier", help="Source tier, one of A/B/C/D")
+    parser.add_argument("--can-enter-conclusion", help="Conclusion permission: full/reference_only/blocked")
     return parser
 
 
@@ -125,7 +133,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_arg_parser()
     args = parser.parse_args(argv)
     multiples = parse_multiples(args.multiples) if args.multiples else parse_multiples()
-    print(render_price_level_report(args.ticker, args.eps, multiples))
+    metadata = {
+        "basis": args.basis,
+        "period": args.period,
+        "source_tier": args.source_tier,
+        "can_enter_conclusion": args.can_enter_conclusion,
+    }
+    print(render_price_level_report(args.ticker, args.eps, multiples, metadata=metadata))
     return 0
 
 
