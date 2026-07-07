@@ -1,27 +1,70 @@
 # Meridian Research Engine 2.0
 
+**A local AI equity research audit and report-gatekeeping engine.**
+
+This is not an AI stock-picking system. It does not predict stock prices, generate buy/sell signals, automate trading, or replace the user's own investment judgment.
+
+It focuses on a different question:
+
+> When an AI-generated investment view looks complete, how do we verify whether its data, assumptions, valuation logic, bear-case evidence, portfolio constraints, and review triggers actually hold?
+
+Meridian Research Engine 2.0 uses macro-cycle analysis, sector rotation, data auditing, fundamental driver models, competition and share modeling, implied-expectation reverse engineering, Bear Case analysis, and Gatekeeper checks to turn an AI research report from "seemingly reasonable" into "auditable, falsifiable, and reviewable."
+
+---
+
+## What This Project Is Not
+
+This project does not:
+
+- Predict short-term stock prices;
+- Generate buy / sell signals;
+- Automate trading;
+- Promise returns;
+- Replace the user's own investment judgment;
+- Display real positions, real cost basis, real price levels, or real trading recommendations in the public repository.
+
+It focuses on the research process itself:
+
+```text
+Is the data reliable?
+Are the assumptions clear?
+Is the valuation explainable?
+Is the bear case strong enough?
+Is the portfolio action premature?
+Are the review conditions defined?
+```
+
+---
+
+## Demo: Research Gatekeeping Dashboard
+
+Meridian Research Engine does not treat "Buy / Sell / Target Price" as the default output. It first checks whether a research report is qualified for delivery.
+
+Examples:
+
+- [`reports/SAMPLE_research_dashboard_zh.md`](reports/SAMPLE_research_dashboard_zh.md)
+- [`reports/SAMPLE_research_report_zh.md`](reports/SAMPLE_research_report_zh.md)
+
+Core difference:
+
+```text
+Typical AI stock analysis: jumps to a conclusion.
+Meridian Research Engine: checks whether the conclusion is qualified for delivery.
+```
+
+---
+
+## Version info
+
+| Field | Value |
+|---|---|
+| Project name | Meridian Research Engine 2.0 |
+| Chinese name | 经纬投研引擎 2.0 |
+| Current version | v2.0.1-beta |
+| Initial release | v2.0.0-beta |
+| Repository | pencilyu1102-pixel/meridian-research-engine-v2 |
+
 中文说明见：[README.md](README.md)
-
-Project name: Meridian Research Engine 2.0  
-Chinese name: 经纬投研引擎 2.0  
-Initial release: v2.0.0-beta  
-Repository: `pencilyu1102-pixel/meridian-research-engine-v2`
-
-Meridian Research Engine 2.0｜经纬投研引擎 2.0 is a global equity buy-side research framework for individual investors and researchers. It does not predict stock prices, generate buy/sell signals, or replace investment decisions. Instead, it helps users make research judgments more disciplined, auditable, falsifiable, and reviewable.
-
-The project centers on macro-cycle analysis, sector rotation, data audit, fundamental drivers, competition share analysis, implied-expectation reverse-engineering, bear-case reasoning, and Gatekeeper release checks, and is designed for structured research workflows across US, A-share, Hong Kong, and other global markets.
-
-### Core Design Philosophy (v2.0.0-beta initial release)
-
-1. **Data validation** as foundation.
-2. **Fundamental driver model** (revenue/gross margin/cost/cash flow/ROIC) and **competition share model** (TAM/SAM/SOM) as core.
-3. **Implied expectation reverse-engineering** (what CAGR, margin, share, multiple is the current price discounting) as valuation framework.
-4. **Bear case** and **falsification framework** (threshold + data source + trigger action) as decision feedback loop.
-5. **Do not predict prices** — reverse-engineer what the current price is discounting.
-6. Do not use a single valuation method for all companies — select **market adapters** (US/CN/HK/GL) and **industry adapters** (8 industry models) by market, industry, and business model.
-7. All reports must pass **Gatekeeper v2.1** (three-tier check + three-grade release + 25 canonical sections) before delivery.
-
-It is not a stock-picking system, not an automated trading system, not a fixed buy/sell signal generator, and not financial advice.
 
 ---
 
@@ -185,6 +228,8 @@ See:
 ## Gatekeeper v2.1 — Report release-quality check
 
 `tools/report_gatekeeper.py` is the content-level release audit system.
+
+Gatekeeper v2.1 is the core module that distinguishes this project from typical AI stock analysis tools: it does not make conclusions look better — it prevents unqualified reports from being delivered.
 
 ### Three-tier architecture
 
