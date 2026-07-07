@@ -1,0 +1,8 @@
+{
+  "basis": "gaap_actual",
+  "usage_context": "core_valuation",
+  "explicit_approval": false,
+  "verified": true,
+  "has_gaap_anchor": true,
+  "ticker": "SAMPLE_CN_GROWTH"
+}

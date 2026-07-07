@@ -1,0 +1,15 @@
+[
+  {
+    "field_name": "sample_us_health_ttm_eps",
+    "value": 8.88,
+    "source": "SAMPLE_US_HEALTH filing",
+    "source_tier": "Z",
+    "timestamp": "2026-07-07T00:00:00Z",
+    "period": "FY2025",
+    "unit": "USD/share",
+    "currency": "USD",
+    "accounting_basis": "gaap_actual",
+    "can_enter_conclusion": "full",
+    "notes": "Unknown source tier for negative test"
+  }
+]

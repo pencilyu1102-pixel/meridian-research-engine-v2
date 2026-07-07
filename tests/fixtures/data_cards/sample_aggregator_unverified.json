@@ -1,0 +1,8 @@
+{
+  "basis": "aggregator_field",
+  "usage_context": "core_valuation",
+  "explicit_approval": false,
+  "verified": false,
+  "has_gaap_anchor": false,
+  "ticker": "SAMPLE_US_HEALTH"
+}

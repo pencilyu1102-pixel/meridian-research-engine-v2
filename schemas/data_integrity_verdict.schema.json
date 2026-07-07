@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://meridian-research-engine-v2/schemas/data_integrity_verdict.schema.json",
+  "title": "Data Integrity Verdict",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["status", "violations"],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "PASS_FORMAL",
+        "PASS_TEST_ONLY",
+        "CALC_ONLY_NOT_FOR_CONCLUSION",
+        "FAIL_DATA_CARD_MISSING",
+        "FAIL_EARNINGS_BASIS",
+        "FAIL_CAPITAL_BRIDGE",
+        "FAIL_INDUSTRY_HARD_FIELDS",
+        "FAIL_SOURCE_PERMISSION"
+      ]
+    },
+    "violations": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "details": {"type": "object"}
+  }
+}
