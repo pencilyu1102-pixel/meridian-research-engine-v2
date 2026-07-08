@@ -1,5 +1,30 @@
 # Changelog
 
+## v2.1.0-alpha — Data Integrity Hardlock
+
+### Added
+- Added Data Card schema and registry MVP.
+- Added Earnings Basis Hardlock.
+- Added Capital Structure Bridge MVP.
+- Added Data Integrity Hardlock aggregator.
+- Integrated Gatekeeper with Hardlock verdicts.
+- Added valuation tool metadata guard.
+- Added Industry Hard Fields MVP with `CN_SEMICONDUCTOR_GROWTH` and `US_MANAGED_CARE`.
+
+### Changed
+- Gatekeeper no longer treats structure-only `FULL_PASS` as formally releasable without a `PASS_FORMAL` hardlock verdict.
+- Valuation tools can still calculate with bare numeric inputs, but such outputs are downgraded to `CALC_ONLY_NOT_FOR_CONCLUSION`.
+- Data Integrity verdicts now distinguish formal release eligibility from internal test or calculation-only outputs.
+
+### Boundaries
+- No real-company sample reports were added.
+- No real price ranges, valuation conclusions, trading suggestions, or account-level actions were added.
+- Public examples continue to use synthetic identifiers such as `SAMPLE_CN_GROWTH` and `SAMPLE_US_HEALTH`.
+
+### Validation
+- Full test suite: 55 passed.
+- Key hardlock regression suite: 38 passed.
+
 ## v2.0.1-beta — Homepage and Research Dashboard Refinement
 
 - Refined README first-screen positioning to emphasize Meridian Research Engine 2.0 as an AI research audit and report-gatekeeping engine.
