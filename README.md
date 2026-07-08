@@ -60,11 +60,45 @@ Meridian Research Engine 2.0｜经纬投研引擎 2.0 是一个本地运行的 A
 |---|---|
 | 项目英文名 | Meridian Research Engine 2.0 |
 | 中文名 | 经纬投研引擎 2.0 |
-| 当前版本 | v2.0.1-beta |
+| 当前版本 | v2.1.0-alpha |
 | 首发版本 | v2.0.0-beta |
 | 仓库 | pencilyu1102-pixel/meridian-research-engine-v2 |
 
 English version: [README_EN.md](README_EN.md)
+
+---
+
+## v2.1.0-alpha: Data Integrity Hardlock
+
+`v2.1.0-alpha` 将经纬投研引擎从“报告结构准出”进一步升级为“数据口径准出”。
+
+正式准出不再只依赖报告结构完整性，而必须同时通过 **Data Integrity Hardlock**。
+
+四层 hardlock 为：
+
+1. Data Card
+2. Earnings Basis
+3. Capital Structure Bridge
+4. Industry Hard Fields
+
+必须明确：
+
+```text
+Gatekeeper 的 FULL_PASS 只有在 Hardlock = PASS_FORMAL 时，才代表正式可准出。
+```
+
+这意味着系统不再只检查“报告像不像一份完整报告”，还要检查“进入结论层的数据字段是否具备正式准出资格”。
+
+简化理解：
+
+```text
+No card, no conclusion.
+No basis, no formal valuation.
+No bridge, no PE.
+No industry hard fields, no FULL_PASS.
+```
+
+本项目仍然不是投资建议工具，不是荐股系统，也不提供自动交易或买卖信号。
 
 ---
 

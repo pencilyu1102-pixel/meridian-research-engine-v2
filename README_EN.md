@@ -60,11 +60,42 @@ Meridian Research Engine: checks whether the conclusion is qualified for deliver
 |---|---|
 | Project name | Meridian Research Engine 2.0 |
 | Chinese name | 经纬投研引擎 2.0 |
-| Current version | v2.0.1-beta |
+| Current version | v2.1.0-alpha |
 | Initial release | v2.0.0-beta |
 | Repository | pencilyu1102-pixel/meridian-research-engine-v2 |
 
 中文说明见：[README.md](README.md)
+
+---
+
+## v2.1.0-alpha: Data Integrity Hardlock
+
+`v2.1.0-alpha` upgrades the engine from structure-level report gating to data-integrity-based release gating.
+
+A report can only be formally releasable when both:
+
+- Data Integrity Hardlock = `PASS_FORMAL`
+- Gatekeeper structure check = `FULL_PASS`
+
+The four hardlock layers are:
+
+1. Data Card
+2. Earnings Basis
+3. Capital Structure Bridge
+4. Industry Hard Fields
+
+This release is not about adding more report templates. It turns field eligibility for the conclusion layer into a hard system gate.
+
+In short:
+
+```text
+No card, no conclusion.
+No basis, no formal valuation.
+No bridge, no PE.
+No industry hard fields, no FULL_PASS.
+```
+
+This project remains a research-audit engine. It is not a stock-picking tool, a trading system, or a buy/sell signal generator.
 
 ---
 
