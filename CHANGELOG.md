@@ -15,6 +15,7 @@
 - Gatekeeper no longer treats structure-only `FULL_PASS` as formally releasable without a `PASS_FORMAL` hardlock verdict.
 - Valuation tools can still calculate with bare numeric inputs, but such outputs are downgraded to `CALC_ONLY_NOT_FOR_CONCLUSION`.
 - Data Integrity verdicts now distinguish formal release eligibility from internal test or calculation-only outputs.
+- Generalized `US_MANAGED_CARE` industry hard fields from UNH-specific names to generic managed care segment fields before alpha release.
 
 ### Boundaries
 - No real-company sample reports were added.
@@ -22,8 +23,8 @@
 - Public examples continue to use synthetic identifiers such as `SAMPLE_CN_GROWTH` and `SAMPLE_US_HEALTH`.
 
 ### Validation
-- Full test suite: 55 passed.
-- Key hardlock regression suite: 38 passed.
+- Full test suite: 59 passed.
+- Key hardlock regression suite: 42 passed.
 
 ## v2.0.1-beta — Homepage and Research Dashboard Refinement
 
