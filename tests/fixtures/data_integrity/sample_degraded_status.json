@@ -4,5 +4,6 @@
     "status": "CALC_ONLY_NOT_FOR_CONCLUSION",
     "violations": ["valuation input lacks metadata"]
   },
-  "capital_bridge": {"status": "PASS_FORMAL", "violations": []}
+  "capital_bridge": {"status": "PASS_FORMAL", "violations": []},
+  "industry_hard_fields": {"status": "PASS_FORMAL", "violations": []}
 }

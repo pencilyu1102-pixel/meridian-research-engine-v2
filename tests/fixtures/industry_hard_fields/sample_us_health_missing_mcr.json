@@ -1,0 +1,17 @@
+{
+  "ticker": "SAMPLE_US_HEALTH",
+  "industry_adapter": "US_MANAGED_CARE",
+  "fields": {
+    "mcr_or_mlr": {"present": false, "can_enter_conclusion": "blocked", "notes": "Synthetic missing MCR/MLR"},
+    "utilization_trend": {"present": true, "can_enter_conclusion": "full", "notes": "Synthetic sample only"},
+    "medicare_advantage": {"present": true, "can_enter_conclusion": "full", "notes": "Synthetic sample only"},
+    "optum": {"present": true, "can_enter_conclusion": "full", "notes": "Synthetic sample only"},
+    "unitedhealthcare": {"present": true, "can_enter_conclusion": "full", "notes": "Synthetic sample only"},
+    "pbm": {"present": true, "can_enter_conclusion": "full", "notes": "Synthetic sample only"},
+    "doj_risk": {"present": true, "can_enter_conclusion": "full", "notes": "Synthetic sample only"},
+    "cms_risk": {"present": true, "can_enter_conclusion": "full", "notes": "Synthetic sample only"},
+    "ftc_risk": {"present": true, "can_enter_conclusion": "full", "notes": "Synthetic sample only"},
+    "oig_risk": {"present": true, "can_enter_conclusion": "full", "notes": "Synthetic sample only"},
+    "sec_risk": {"present": true, "can_enter_conclusion": "full", "notes": "Synthetic sample only"}
+  }
+}

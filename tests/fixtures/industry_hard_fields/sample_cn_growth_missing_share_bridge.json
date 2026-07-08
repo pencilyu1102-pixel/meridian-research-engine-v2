@@ -1,0 +1,12 @@
+{
+  "ticker": "SAMPLE_CN_GROWTH",
+  "industry_adapter": "CN_SEMICONDUCTOR_GROWTH",
+  "fields": {
+    "revenue_growth_driver": {"present": true, "can_enter_conclusion": "full", "notes": "Synthetic sample only"},
+    "gross_margin_trend": {"present": true, "can_enter_conclusion": "full", "notes": "Synthetic sample only"},
+    "r_and_d_intensity": {"present": true, "can_enter_conclusion": "full", "notes": "Synthetic sample only"},
+    "share_count_bridge": {"present": false, "can_enter_conclusion": "blocked", "notes": "Synthetic missing bridge"},
+    "valuation_anchor_type": {"present": true, "can_enter_conclusion": "full", "notes": "Synthetic sample only"},
+    "low_base_or_oneoff_flag": {"present": true, "can_enter_conclusion": "full", "notes": "Synthetic sample only"}
+  }
+}

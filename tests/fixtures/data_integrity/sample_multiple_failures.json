@@ -10,5 +10,9 @@
   "capital_bridge": {
     "status": "FAIL_CAPITAL_BRIDGE",
     "violations": ["market cap closure exceeds tolerance"]
+  },
+  "industry_hard_fields": {
+    "status": "FAIL_INDUSTRY_HARD_FIELDS",
+    "violations": ["missing required industry hard field: mcr_or_mlr"]
   }
 }

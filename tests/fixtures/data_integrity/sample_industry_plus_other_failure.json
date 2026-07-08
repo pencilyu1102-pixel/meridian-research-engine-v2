@@ -5,5 +5,8 @@
     "violations": ["guidance EPS cannot be used as trailing EPS"]
   },
   "capital_bridge": {"status": "PASS_FORMAL", "violations": []},
-  "industry_hard_fields": {"status": "PASS_FORMAL", "violations": []}
+  "industry_hard_fields": {
+    "status": "FAIL_INDUSTRY_HARD_FIELDS",
+    "violations": ["missing required industry hard field: mcr_or_mlr"]
+  }
 }

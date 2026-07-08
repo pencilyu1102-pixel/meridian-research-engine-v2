@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://meridian-research-engine-v2/schemas/industry_hard_fields.schema.json",
+  "title": "Industry Hard Fields Sidecar",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["industry_adapter", "fields"],
+  "properties": {
+    "industry_adapter": {
+      "type": "string",
+      "enum": ["CN_SEMICONDUCTOR_GROWTH", "US_MANAGED_CARE"]
+    },
+    "ticker": {"type": "string"},
+    "fields": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["present", "can_enter_conclusion"],
+        "properties": {
+          "present": {"type": "boolean"},
+          "can_enter_conclusion": {
+            "type": "string",
+            "enum": ["full", "reference_only", "blocked"]
+          },
+          "notes": {"type": "string"}
+        }
+      }
+    }
+  }
+}
