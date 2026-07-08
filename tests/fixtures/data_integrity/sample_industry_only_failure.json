@@ -2,5 +2,8 @@
   "data_card": {"status": "PASS_FORMAL", "violations": []},
   "earnings_basis": {"status": "PASS_FORMAL", "violations": []},
   "capital_bridge": {"status": "PASS_FORMAL", "violations": []},
-  "industry_hard_fields": {"status": "PASS_FORMAL", "violations": []}
+  "industry_hard_fields": {
+    "status": "FAIL_INDUSTRY_HARD_FIELDS",
+    "violations": ["missing required industry hard field: share_count_bridge"]
+  }
 }
