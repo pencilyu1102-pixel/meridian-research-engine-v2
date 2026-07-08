@@ -15,7 +15,7 @@
 - Gatekeeper no longer treats structure-only `FULL_PASS` as formally releasable without a `PASS_FORMAL` hardlock verdict.
 - Valuation tools can still calculate with bare numeric inputs, but such outputs are downgraded to `CALC_ONLY_NOT_FOR_CONCLUSION`.
 - Data Integrity verdicts now distinguish formal release eligibility from internal test or calculation-only outputs.
-- Generalized `US_MANAGED_CARE` industry hard fields from UNH-specific names to generic managed care segment fields before alpha release.
+- Generalized `US_MANAGED_CARE` industry hard fields from company-specific names to generic managed care segment fields before alpha release.
 
 ### Boundaries
 - No real-company sample reports were added.
