@@ -87,7 +87,7 @@ jobs:
           if grep -rI --include='*.py' --include='*.json' --include='*.yaml' --include='*.yml' \
             -E '(api[_-]?key|access[_-]?token|client[_-]?secret|password\s*=|credential)' \
             tools/ scripts/ tests/ examples/ \
-            --exclude='scripts/preflight_release_check.py' \
+            --exclude='preflight_release_check.py' \
             2>/dev/null; then
             echo "ERROR: potential credential found"
             exit 1
