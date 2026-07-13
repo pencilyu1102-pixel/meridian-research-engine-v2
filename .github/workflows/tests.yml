@@ -1,18 +1,21 @@
-name: Tests
+name: MRE v2.2 — Contract & Synthetic Boundary
 
 on:
   push:
+    branches: [main]
   pull_request:
+    branches: [main]
 
 jobs:
-  pytest:
+  contract-tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
-      - name: Check out repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -20,9 +23,73 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
+          pip install -r requirements.txt
 
-      - name: Run tests
+      - name: Run full test suite
         env:
           PYTHONPATH: ${{ github.workspace }}
-        run: python -m pytest -q
+        run: python -m pytest tests/ -q
+
+      - name: Run offline demo
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: python scripts/run_demo.py
+
+      - name: Verify synthetic boundary (PASS_TEST_ONLY only)
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python scripts/validate_agent_report.py \
+            --report outputs/agent_demo/SAMPLE_MANAGED_CARE_agent_report_bound_zh.md \
+            --bundle examples/full_chain_sample/research_bundle.json \
+            --output ci_validation.json
+
+          python -c "
+          import json, sys
+          d = json.load(open('ci_validation.json'))
+          errors = []
+
+          if d['binding_status'] != 'PASS':
+              errors.append(f'binding_status={d[\"binding_status\"]} (expected PASS)')
+          if d['hardlock_verdict']['status'] != 'PASS_TEST_ONLY':
+              errors.append(f'hardlock={d[\"hardlock_verdict\"][\"status\"]} (expected PASS_TEST_ONLY)')
+          if d['gatekeeper_result']['final_status'] != 'PASS_TEST_ONLY':
+              errors.append(f'gatekeeper={d[\"gatekeeper_result\"][\"final_status\"]} (expected PASS_TEST_ONLY)')
+          if d['production_research_eligible'] is not False:
+              errors.append(f'production_research_eligible={d[\"production_research_eligible\"]} (expected False)')
+          if d['account_action'] != 'LOCKED':
+              errors.append(f'account_action={d[\"account_action\"]} (expected LOCKED)')
+
+          if errors:
+              print('SYNTHETIC BOUNDARY VIOLATIONS:')
+              for e in errors: print(f'  - {e}')
+              sys.exit(1)
+          print('SYNTHETIC BOUNDARY: OK')
+          "
+
+      - name: Verify no real company data in public repo
+        run: |
+          # Exclude boundary-checking scripts that legitimately list ticker names
+          # as blacklist patterns (preflight_release_check.py, test_full_chain_demo.py)
+          if grep -rI --include='*.json' --include='*.md' --include='*.py' \
+            -E '\b(UNH|AMZN|MSFT|AAPL|GOOGL|META|NVDA|TSLA|JPM|BRK)\b' \
+            examples/ tests/ tools/ scripts/ \
+            --exclude='preflight_release_check.py' \
+            --exclude='test_full_chain_demo.py' \
+            2>/dev/null; then
+            echo "ERROR: real ticker found in public repo"
+            exit 1
+          fi
+          echo "PUBLIC DATA BOUNDARY: OK"
+
+      - name: Verify no API keys or credentials
+        run: |
+          if grep -rI --include='*.py' --include='*.json' --include='*.yaml' --include='*.yml' \
+            -E '(api[_-]?key|access[_-]?token|client[_-]?secret|password\s*=|credential)' \
+            tools/ scripts/ tests/ examples/ \
+            --exclude='scripts/preflight_release_check.py' \
+            2>/dev/null; then
+            echo "ERROR: potential credential found"
+            exit 1
+          fi
+          echo "CREDENTIAL BOUNDARY: OK"
