@@ -1,15 +1,15 @@
 """Phase 3D.1 semantic closure tests — D-tier recordable, PASS_TEST_ONLY gatekeeper, boundary."""
 
-import json, subprocess, sys
+import json, subprocess, sys, tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-BOUND_REPORT = ROOT / "outputs/agent_demo/SAMPLE_MANAGED_CARE_agent_report_bound_zh.md"
+BOUND_REPORT = ROOT / "tests/fixtures/agent_demo/SAMPLE_MANAGED_CARE_agent_report_bound_zh.md"
+UNBOUND_REPORT = ROOT / "tests/fixtures/agent_demo/SAMPLE_MANAGED_CARE_agent_report_zh.md"
 BUNDLE_PATH = ROOT / "examples/full_chain_sample/research_bundle.json"
-OUT_DIR = ROOT / "outputs/agent_demo"
-OUT_DIR.mkdir(parents=True, exist_ok=True)
+OUT_DIR = Path(tempfile.mkdtemp(prefix="mre_test_"))
 
 def _base_card(**kw):
     return {"field_name":"eps","value":"1","source":"x","source_tier":"S",
@@ -355,7 +355,7 @@ def test_macro_synthetic():
 def test_real_missing_price_still_fails_gatekeeper():
     """Unbound report with rule text + no hardlock → still fails legacy check."""
     from tools.report_gatekeeper import check_report
-    old_report = (ROOT/"outputs/agent_demo/SAMPLE_MANAGED_CARE_agent_report_zh.md").read_text()
+    old_report = UNBOUND_REPORT.read_text()
     r = check_report(old_report, mode="formal", language="zh", hardlock_verdict=None)
     assert r["final_status"] == "FAIL_DATA_HARDLOCK"
 
