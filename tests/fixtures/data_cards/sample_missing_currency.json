@@ -9,6 +9,8 @@
     "unit": "CNY/share",
     "accounting_basis": "gaap_actual",
     "can_enter_conclusion": "full",
-    "notes": "Missing currency for negative test"
+    "notes": "Missing currency for negative test",
+    "freshness_status": "current",
+    "has_conflict": false
   }
 ]

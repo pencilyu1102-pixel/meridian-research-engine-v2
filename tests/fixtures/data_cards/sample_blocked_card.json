@@ -10,6 +10,8 @@
     "currency": "N/A",
     "accounting_basis": "reference_metric",
     "can_enter_conclusion": "blocked",
-    "notes": "Blocked sample for permission test"
+    "notes": "Blocked sample for permission test",
+    "freshness_status": "current",
+    "has_conflict": false
   }
 ]

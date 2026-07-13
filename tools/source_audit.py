@@ -1,4 +1,4 @@
-"""Lightweight source reliability audit."""
+"""Lightweight source reliability audit — delegates to tools.source_policy."""
 
 from __future__ import annotations
 
@@ -6,8 +6,7 @@ import argparse
 from dataclasses import dataclass
 from typing import Sequence
 
-
-VALID_TIERS = {"S", "A", "B", "C", "D"}
+from tools.source_policy import ALLOWED_SOURCE_TIERS, check_source_admission
 
 
 @dataclass(frozen=True)
@@ -27,12 +26,12 @@ def audit_source(
     accounting_basis: str,
     period_basis: str,
     has_conflict: bool = False,
+    freshness_status: str = "unknown",
 ) -> SourceAuditResult:
     """Audit whether a source is complete enough to support a conclusion."""
-
     normalized_tier = tier.upper()
     issues: list[str] = []
-    if normalized_tier not in VALID_TIERS:
+    if normalized_tier not in ALLOWED_SOURCE_TIERS:
         issues.append("invalid source tier")
     for field_name, value in (
         ("timestamp", timestamp),
@@ -45,13 +44,22 @@ def audit_source(
             issues.append(f"missing {field_name}")
     if has_conflict:
         issues.append("conflicting source data")
-    can_enter = normalized_tier in {"S", "A", "B"} and not issues
-    return SourceAuditResult(source=source, tier=normalized_tier, can_enter_conclusion=can_enter, issues=tuple(issues))
+
+    card = {
+        "field_name": source,
+        "source_tier": normalized_tier,
+        "can_enter_conclusion": "full",
+        "freshness_status": freshness_status,
+        "has_conflict": has_conflict,
+    }
+    sp = check_source_admission(card)
+    can_enter = sp.can_enter_conclusion and not issues
+    return SourceAuditResult(
+        source=source, tier=normalized_tier, can_enter_conclusion=can_enter, issues=tuple(issues)
+    )
 
 
 def render_source_audit(result: SourceAuditResult) -> str:
-    """Render source audit result as Markdown."""
-
     issues = ", ".join(result.issues) if result.issues else "None"
     return "\n".join(
         [
@@ -94,5 +102,5 @@ def main(argv: Sequence[str] | None = None) -> int:
     return 0 if result.can_enter_conclusion else 1
 
 
-if __name__ == "__main__":  # pragma: no cover
+if __name__ == "__main__":
     raise SystemExit(main())

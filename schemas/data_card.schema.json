@@ -15,13 +15,15 @@
     "currency",
     "accounting_basis",
     "can_enter_conclusion",
-    "notes"
+    "notes",
+    "freshness_status",
+    "has_conflict"
   ],
   "properties": {
     "field_name": {"type": "string", "minLength": 1},
     "value": {},
     "source": {"type": "string", "minLength": 1},
-    "source_tier": {"type": "string", "enum": ["A", "B", "C", "D"]},
+    "source_tier": {"type": "string", "enum": ["S", "A", "B", "C", "D"]},
     "timestamp": {"type": "string", "minLength": 1},
     "period": {"type": "string", "minLength": 1},
     "unit": {"type": "string"},
@@ -31,6 +33,8 @@
       "type": "string",
       "enum": ["full", "reference_only", "blocked"]
     },
-    "notes": {"type": "string"}
+    "notes": {"type": "string"},
+    "freshness_status": {"type": "string", "enum": ["current", "stale", "unknown"]},
+    "has_conflict": {"type": "boolean"}
   }
 }

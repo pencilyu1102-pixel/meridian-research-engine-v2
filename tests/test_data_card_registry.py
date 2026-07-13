@@ -74,6 +74,8 @@ def test_reference_only_cards_cannot_enter_primary_valuation():
                 "accounting_basis": "reference_metric",
                 "can_enter_conclusion": "reference_only",
                 "notes": "reference only",
+                "freshness_status": "current",
+                "has_conflict": False,
             }
         ]
     )

@@ -1,49 +1,90 @@
 # Meridian Research Engine 2.0
 
-Meridian Research Engine 2.0 is a local AI equity research audit and report-gatekeeping engine, as well as a global equity buy-side research framework for individual investors and researchers.
+An AI-native, full-chain equity research workflow covering macro conditions, sectors, companies, valuation, portfolio constraints and risk.
 
-It is not an AI stock-picking system. It does not predict stock prices, generate buy/sell signals, automate trading, or replace the user's own investment judgment.
+Meridian Research Engine helps generate structured investment research reports and checks their data sources, accounting basis, valuation assumptions, competitive reasoning, opposing evidence and review conditions.
 
-It focuses on a different question:
+It is not an AI stock picker and does not predict prices. Its purpose is to help AI produce research that is **traceable, challengeable and reviewable.**
 
-> When an AI-generated investment view looks complete, how do we verify whether its data, assumptions, valuation logic, bear-case evidence, portfolio constraints, and review triggers actually hold?
-
-The project is built around macro-cycle analysis, sector rotation, data auditing, fundamental driver models, competition and share modeling, implied-expectation reverse engineering, Bear Case analysis, and Gatekeeper checks. Its goal is to turn an AI research report from "seemingly reasonable" into "auditable, falsifiable, and reviewable."
+> It does not predict the future — it helps you see the present clearly.
 
 ---
 
-## What This Project Is Not
+## What a Meridian report includes
 
-This project does not:
+A fully gated research report covers at minimum:
 
-- Predict short-term stock prices;
-- Generate buy / sell signals;
-- Automate trading;
-- Promise returns;
-- Replace the user's own investment judgment;
-- Display real positions, real cost basis, real price levels, or real trading recommendations in the public repository.
+| Layer | Content |
+|---|---|
+| Macro & Market | Macro cycle, liquidity, market pricing, sector rotation |
+| Industry & Competition | Industry conditions, lifecycle, competitive landscape, share shifts |
+| Company & Fundamentals | Revenue/profit/cash flow/ROIC driver trees, core variable ranking |
+| Data & Accounting | Source, date, currency, unit, accounting basis, source tier |
+| Valuation & Expectations | Three-scenario valuation (Bear/Base/Bull), implied expectation reverse-engineering |
+| Risk & Falsification | Bear case, falsification conditions and thresholds |
+| Four-Layer Judgment | Company view, valuation view, account view, review/action status |
+| Quality Gatekeeping | Data Integrity Hardlock + Gatekeeper release check |
+| Review Loop | Next-review triggers and variables to monitor |
 
-It focuses on the research process itself:
+Full reports use 25 canonical sections. Templates are in [`templates/`](templates/).
+
+---
+
+## Full research chain
 
 ```text
-Is the data reliable?
-Are the assumptions clear?
-Is the valuation explainable?
-Is the bear case strong enough?
-Is the portfolio action premature?
-Are the review conditions defined?
+Research request
+→ Market and industry adapter selection
+→ Macro cycle and sector rotation analysis
+→ Company fundamentals and competitive position
+→ Valuation and implied expectations
+→ Portfolio constraints and risk
+→ Bear case and falsification conditions
+→ Generate standard research report
+→ Data Integrity Hardlock
+→ Gatekeeper release check
+→ Release status and review triggers
 ```
+
+The goal: **prevent AI from jumping directly to a conclusion.** Every key judgment must carry data sources, opposing evidence, and falsification conditions.
 
 ---
 
-## Demo: Research Gatekeeping Dashboard
+## Two ways to use
 
-Meridian Research Engine does not treat "Buy / Sell / Target Price" as the default output. It first checks whether a research report is qualified for delivery.
+### Path A: Generate a full research report
 
-Examples:
+The repository provides `SKILL.md`, `agents/` (10 agent roles), `workflows/` (10 workflows), and `templates/` (17 templates) to guide an AI Agent through the full research chain.
 
-- [`reports/SAMPLE_research_dashboard_zh.md`](reports/SAMPLE_research_dashboard_zh.md)
-- [`reports/SAMPLE_research_report_zh.md`](reports/SAMPLE_research_report_zh.md)
+> **Note:** A unified agent installer and end-to-end orchestration script are not yet available. Specific agent-host runtime instructions will be added in a future version. For now, users can manually load SKILL.md, the relevant workflow, and templates into a supported AI Agent environment.
+
+### Path B: Gate-check an existing report
+
+Use the Python tools to audit report structure and data integrity:
+
+```bash
+# Gatekeeper release-quality check (3-tier, 3-grade, 3-mode)
+python tools/report_gatekeeper.py reports/REPORT.md --language en
+
+# Data Integrity Hardlock
+# Via Gatekeeper's --hardlock-file parameter or programmatic call
+
+# Vague-phrase detection
+python tools/contradiction_hunter.py reports/REPORT.md
+```
+
+The Gatekeeper checks section presence, language compliance, content depth, and 10 downgrade rules before delivery — preventing unqualified reports from being treated as final.
+
+---
+
+## SAMPLE release-gating demo
+
+These examples show the gating process using generic `SAMPLE` identifiers — no real companies, prices, or investment advice:
+
+- [`reports/SAMPLE_research_dashboard_zh.md`](reports/SAMPLE_research_dashboard_zh.md) — Release-gating dashboard
+- [`reports/SAMPLE_research_report_zh.md`](reports/SAMPLE_research_report_zh.md) — Standard report template (contains TODO placeholders; Gatekeeper rejection is expected behavior)
+
+**Offline demo:** Run `python scripts/run_demo.py` to experience the full chain (synthetic data → report → gatekeeping → release status). The demo yields `PASS_TEST_ONLY`, meaning the synthetic report passes all contracts (Data Card, Source Policy, Hardlock, Gatekeeper) but is **not production-release eligible** (`TEST_ONLY_NOT_RELEASABLE` / `LOCKED`). It does not validate real market data or represent any investment conclusion.
 
 Core difference:
 
@@ -54,39 +95,48 @@ Meridian Research Engine: checks whether the conclusion is qualified for deliver
 
 ---
 
-## Version info
+## Current capability boundaries
 
-| Field | Value |
+| Tier | Content |
 |---|---|
-| Project name | Meridian Research Engine 2.0 |
-| Chinese name | 经纬投研引擎 2.0 |
-| Current version | v2.1.0-alpha |
-| Initial release | v2.0.0-beta |
-| Repository | pencilyu1102-pixel/meridian-research-engine-v2 |
-
-中文说明见：[README.md](README.md)
+| Runnable directly | Python calculation tools (macro scoring, price level engine, valuation scenarios, reverse DCF, etc.), Data Card, Data Integrity Hardlock, Gatekeeper |
+| Completed via AI Agent workflow | Macro analysis, industry research, company fundamentals, competitive analysis, valuation modeling, bear case, full report generation |
+| Not currently provided | Automated real-time data terminal, broker connectivity, auto-trading, return promises, unified agent installer |
 
 ---
 
-## v2.1.0-alpha: Data Integrity Hardlock
+## v2.2 Data provenance and release gating
 
-`v2.1.0-alpha` upgrades the engine from structure-level report gating to data-integrity-based release gating.
+### Source Policy
 
-A report can only be formally releasable when both:
+Every data point entering a research conclusion must carry a **Data Card** classified by source reliability into five tiers:
 
-- Data Integrity Hardlock = `PASS_FORMAL`
-- Gatekeeper structure check = `FULL_PASS`
+| Tier | Max Permission | Conclusion-Eligible | Typical Sources |
+|------|---------------|---------------------|-----------------|
+| **S** | `full` | ✅ Yes | SEC EDGAR / HKEX filings / audited financials |
+| **A** | `full` | ✅ Yes | Bloomberg / FactSet / official statistics |
+| **B** | `reference_only` | Reference only | Sell-side research / industry media / aggregators |
+| **C** | `reference_only` | Reference only | Unverified aggregators / social media |
+| **D** | `blocked` | ❌ No | Unknown origin / anonymous / untraceable |
 
-The four hardlock layers are:
+Each Data Card must include the following required metadata:
 
-1. Data Card
-2. Earnings Basis
-3. Capital Structure Bridge
-4. Industry Hard Fields
+```text
+basis             — accounting basis (gaap_actual / non_gaap / management_guidance)
+period            — data period (TTM / FY2024 / Q1 2025)
+source_tier       — source tier (S / A / B / C / D)
+can_enter_conclusion — requested permission (full / reference_only / blocked)
+freshness_status  — data freshness (current / stale / unknown)
+has_conflict      — conflicting data exists (true / false)
+```
 
-This release is not about adding more report templates. It turns field eligibility for the conclusion layer into a hard system gate.
+Any `freshness_status` value outside `{current, stale, unknown}` is rejected. Conflicting data (`has_conflict=true`) or stale data cannot enter formal conclusions.
 
-In short:
+**Valuation denominator** (`valuation_denominator`) is a critical field requiring an S/A-tier Data Card with `full` permission.
+
+### Data Integrity Hardlock
+
+Formal release requires passing four data integrity layers:
 
 ```text
 No card, no conclusion.
@@ -95,356 +145,113 @@ No bridge, no PE.
 No industry hard fields, no FULL_PASS.
 ```
 
-This project remains a research-audit engine. It is not a stock-picking tool, a trading system, or a buy/sell signal generator.
+### Gatekeeper release statuses
 
----
+| Status | Meaning | Formal Release | Test-OK |
+|--------|---------|---------------|---------|
+| `PASS_FORMAL` | All Data Cards, Source Policy, and Hardlock pass | ✅ | ✅ |
+| `PASS_TEST_ONLY` | Contract integrity passes, but data is synthetic/test | ❌ | ✅ |
+| `FAIL_DATA_HARDLOCK` | Data hardlock failed | ❌ | ❌ |
 
-## Important disclaimer
+Synthetic data (`data_provenance=SYNTHETIC_FIXTURE`) can at most receive `PASS_TEST_ONLY` — never production-release eligible.
 
-This project does not provide investment advice, trading recommendations, price predictions, automated execution, or guaranteed returns.
+### Report Binding and Validation (Validator)
 
-All outputs are research workflow materials, data-audit aids, and decision-support drafts. Users must make their own decisions and bear their own risks.
+`scripts/validate_agent_report.py` runs three checks before Gatekeeper:
 
-This project is not suitable for:
+1. **Binding**: report metadata (research_id, symbol, market, as_of_date, bundle_sha256) must match the Research Bundle
+2. **Bundle Hash**: all external files referenced by the Bundle (data_cards, industry_fields) participate in a recursive hash; any content change alters the hash
+3. **Path safety**: absolute paths and parent-directory escapes are rejected
 
-- automatic order execution;
-- short-term trading signals;
-- replacing personal judgment;
-- predicting prices;
-- promising returns;
-- buying or selling based on one metric;
-- treating AI output as the final conclusion.
+```bash
+python scripts/validate_agent_report.py \
+  --report outputs/agent_demo/SAMPLE_MANAGED_CARE_agent_report_bound_zh.md \
+  --bundle examples/full_chain_sample/research_bundle.json \
+  --output validation_result.json
+```
 
-Public examples must use generic identifiers such as `SAMPLE`, `TICKER`, or `ABC`. Do not publish real account screenshots, private cost basis, private transaction records, or real personal position details.
-
-## Case Study Boundary / 案例边界
-
-Public examples in this repository use generic identifiers such as SAMPLE, TICKER, or ABC.
-
-公开展示样例仅使用 `SAMPLE`、`TICKER` 或 `ABC` 等虚拟标识。
-
-Company-specific historical reports are not included in this public repository. All public examples use `SAMPLE`, `TICKER`, or `ABC` generic identifiers and do not constitute investment advice, trading recommendations, target-price guidance, or model endorsements.
-
-公开仓库不包含任何具体公司历史投研报告。所有公开展示例均使用 `SAMPLE`、`TICKER` 或 `ABC` 等虚拟标识，不构成投资建议、交易推荐、目标价指引或模型背书。
+A binding failure prevents Gatekeeper invocation — mismatched reports never enter the gating pipeline.
 
 ---
 
 ## Quick start
 
-Full local usage guide:
-
-- [`docs/quickstart_usage.md`](docs/quickstart_usage.md)
-
-Common commands:
-
 ```bash
 git clone https://github.com/pencilyu1102-pixel/meridian-research-engine-v2.git
 cd meridian-research-engine-v2
 pip install -r requirements.txt
+
+# Run all tests (127 passed)
 python -m pytest -q
+
+# Macro six-factor scoring
 python tools/macro_score.py --growth 1 --inflation 0 --liquidity 1 --credit 0 --earnings 1 --risk 0
+
+# Price Level Engine
 python tools/price_level_engine.py --eps 10.00 --ticker SAMPLE --multiples 12,15,18,20
-python tools/portfolio_cost.py examples/transactions_example.csv --ticker ABC
-python tools/valuation_scenario.py --eps 10.00 --bear 12 --base 15 --bull 18
-# Gatekeeper — two equivalent invocation styles:
+
+# Gatekeeper (two equivalent styles)
 python tools/report_gatekeeper.py reports/SAMPLE_research_report_zh.md --language zh
 python tools/report_gatekeeper.py --file reports/SAMPLE_research_report_zh.md --language zh
 ```
 
----
-
-## Language rule
-
-Reports must be generated in one selected language.
-
-- Chinese user request: use the Chinese report template (25 canonical h2 sections).
-- English user request: use the English report template (25 canonical h2 sections).
-- Explicit language request overrides auto-detection.
-- Tickers, commands, file paths, formulas, module names, and source names may remain in their original form.
-- Section headings, table columns, explanatory paragraphs, conclusions, and review triggers must use the selected report language.
-
-See:
-
-- [`docs/language_policy.md`](docs/language_policy.md)
-
----
-
-## Standard report template
-
-Do not fill `templates/standard_research_report.md` directly. It is only a selector file.
-
-Use language-specific templates:
-
-- Chinese report: [`templates/standard_research_report_zh.md`](templates/standard_research_report_zh.md) (25 canonical h2 sections)
-- English report: [`templates/standard_research_report_en.md`](templates/standard_research_report_en.md) (25 canonical h2 sections)
-
-A standard report must separate four layers:
-
-```text
-Company view: Is this a good company?
-Valuation view: Is the current price attractive?
-Account view: Does the real portfolio allow action?
-Review / Action status: Observe, review, wait, reduce risk, or insufficient data.
-```
-
-A good company is not automatically a good price. A good price is not automatically suitable for the current account.
-
-**Template rules:**
-- All `##` section headings must be preserved in final reports.
-- If a section does not apply, write "not applicable + reason" — do not delete the section.
-- Gatekeeper modes: `formal` (default), `core` (framework test), `smoke` (quick check).
-
----
-
-## Word and PDF report export
-
-Meridian Research Engine 2.0 uses Markdown as the canonical source format. Word and PDF are delivery formats.
-
-Report export guide:
-
-- [`docs/report_export.md`](docs/report_export.md)
-
-Chinese report export:
+> These are standalone calculation and gatekeeping tools, not a full AI report generator. A complete research report requires an AI Agent working with SKILL.md, workflows, and templates.
 
 ```bash
-mkdir -p reports
-cp templates/standard_research_report_zh.md reports/SAMPLE_research_report_zh.md
-python tools/report_gatekeeper.py reports/SAMPLE_research_report_zh.md --language zh
-pandoc reports/SAMPLE_research_report_zh.md -o reports/SAMPLE_research_report_zh.docx
+# Offline full-chain demo (synthetic data → report → Hardlock → Gatekeeper)
+python scripts/run_demo.py
+
+# Report binding validation (Validator → Hardlock → Gatekeeper)
+python scripts/validate_agent_report.py \
+  --report outputs/agent_demo/SAMPLE_MANAGED_CARE_agent_report_bound_zh.md \
+  --bundle examples/full_chain_sample/research_bundle.json \
+  --output validation_result.json
 ```
 
-English report export:
-
-```bash
-mkdir -p reports
-cp templates/standard_research_report_en.md reports/SAMPLE_research_report_en.md
-python tools/report_gatekeeper.py reports/SAMPLE_research_report_en.md --language en
-pandoc reports/SAMPLE_research_report_en.md -o reports/SAMPLE_research_report_en.docx
-```
-
-PDF can be exported from Word / WPS, or generated with Pandoc if a local PDF engine is configured.
+Full installation, testing, and tool documentation: [`docs/quickstart_usage.md`](docs/quickstart_usage.md).
 
 ---
 
-## Language rule
+## Who this is for
 
-Reports must be generated in one selected language.
+**For:** Researchers and investors who want AI to produce research with sources, opposing evidence, and review conditions.
 
-- Chinese user request: use the Chinese report template (25 canonical h2 sections).
-- English user request: use the English report template (25 canonical h2 sections).
-- Explicit language request overrides auto-detection.
-- Tickers, commands, file paths, formulas, module names, and source names may remain in their original form.
-- Section headings, table columns, explanatory paragraphs, conclusions, and review triggers must use the selected report language.
-
-See:
-
-- [`docs/language_policy.md`](docs/language_policy.md)
+**Not for:** Users seeking instant stock picks, buy/sell signals, or automated trading systems.
 
 ---
 
-## Core module documentation
+## Project boundaries
+
+This project does **not**:
+
+- Predict short-term stock prices;
+- Generate buy/sell signals;
+- Automate trading;
+- Promise returns;
+- Replace the user's own investment judgment;
+- Display real positions, real cost basis, real price levels, or real trading recommendations in the public repository.
+
+It focuses on the research process itself: Is the data reliable? Are the assumptions clear? Is the valuation explainable? Is the bear case strong enough? Are the review conditions defined?
+
+---
+
+## Core methodology and nine-agent system
+
+The project is built around a global equity buy-side research framework. Core methodology docs:
 
 | Module | Doc | Purpose |
 |---|---|---|
-| Market adapters | [`docs/market_adapters.md`](docs/market_adapters.md) | US/CN/HK/GL market analysis priorities |
-| Industry adapters | [`docs/industry_adapters.md`](docs/industry_adapters.md) | 8 industry revenue driver models |
+| Market adapters | [`docs/market_adapters.md`](docs/market_adapters.md) | US/CN/HK/GL market analysis frameworks |
+| Industry adapters | [`docs/industry_adapters.md`](docs/industry_adapters.md) | 8 industry revenue driver formulas |
 | Fundamental driver model | [`docs/fundamental_driver_model.md`](docs/fundamental_driver_model.md) | Revenue/profit/cash flow/ROIC driver trees |
-| Competition and share model | [`docs/competition_share_model.md`](docs/competition_share_model.md) | TAM/SAM/SOM, value chain, moats, competitor reverse-engineering |
-| Implied expectation model | [`docs/implied_expectation_model.md`](docs/implied_expectation_model.md) | What CAGR/margin/multiple/share is priced in |
-| Falsification framework | [`docs/falsification_framework.md`](docs/falsification_framework.md) | Core judgment falsification thresholds |
+| Competition & share model | [`docs/competition_share_model.md`](docs/competition_share_model.md) | TAM/SAM/SOM + value chain + moats |
+| Implied expectation model | [`docs/implied_expectation_model.md`](docs/implied_expectation_model.md) | What is priced into the current price |
+| Falsification framework | [`docs/falsification_framework.md`](docs/falsification_framework.md) | Thresholds + data sources + trigger actions |
 | Data quality checklist | [`docs/data_quality_checklist.md`](docs/data_quality_checklist.md) | 10 mandatory data validations |
 
----
+The research system is powered by 9 agent roles: Macro Consensus, Asset Rotation, Industry Position, Company Fundamental, Valuation & Margin, Portfolio Execution, Data Auditor, Bear Case, and Team Lead. See [`agents/`](agents/).
 
-## Gatekeeper v2.1 — Report release-quality check
-
-`tools/report_gatekeeper.py` is the content-level release audit system.
-
-Gatekeeper v2.1 is the core module that distinguishes this project from typical AI stock analysis tools: it does not make conclusions look better — it prevents unqualified reports from being delivered.
-
-### Three-tier architecture
-
-| Layer | Check | Purpose |
-|---|---|---|
-| Layer 0 | Section existence (25 canonical headings exact match) | No missing sections |
-| Layer 1 | Language compliance + vague phrase detection | Clean language |
-| Layer 2 | Content depth (core module required fields) | Non-empty reports |
-| Layer 3 | 10 downgrade rules (up to hard lock) | Data completeness |
-
-### Three operation modes
-
-| Mode | Purpose | Scope |
-|---|---|---|
-| `formal` (default) | Formal release | All 25 sections exact + content depth + language + 10 rules |
-| `core` | Framework test | 10 core modules fuzzy match + content depth |
-| `smoke` | Quick check | 3 most-likely-missed modules (industry adapter, competition share, implied expectation) |
-
-### Three grades
-
-| Grade | Meaning |
-|---|---|
-| **FULL_PASS / 可准出** | All core data, valuation, driver model, competition model, falsification complete |
-| **CORE_PASS_TEMPLATE_FAIL / 条件准出** | Core content passes, but section headers don't match canonical list |
-| **HARD_LOCK_FAIL / 不可准出** | Missing price/market cap/financial data — cannot be released |
-
-### 10 downgrade rules
-
-1. No market adapter → max conditionally releasable
-2. No industry adapter → max conditionally releasable
-3. No fundamental driver model → max conditionally releasable
-4. No competition and share model → max conditionally releasable
-5. No implied expectation → max conditionally releasable
-6. **Missing/outdated price, market cap, or shares → NOT RELEASABLE**
-7. **Core data without source → NOT RELEASABLE**
-8. Bear/Base/Bull without probability or trigger → max conditionally releasable
-9. No falsification indicators → max conditionally releasable
-10. Risks without thresholds and action → max conditionally releasable
-
-### Commands
-
-```bash
-# Formal release (25 exact match + content depth)
-python tools/report_gatekeeper.py reports/REPORT.md --language en
-
-# Core module check (10 modules, alias fuzzy matching)
-python tools/report_gatekeeper.py reports/REPORT.md --language en --mode core
-
-# Smoke test (3 most-likely-missed modules)
-python tools/report_gatekeeper.py reports/REPORT.md --language en --mode smoke
-```
-
----
-
-## Core capabilities
-
-| Capability | Purpose |
-|---|---|
-| Macro cycle | 6-factor scoring (-2~+2), macro environment assessment |
-| Sector rotation | 3-gate check (macro wind, industry conditions, valuation crowding) |
-| Market adapters | 4 frameworks (US/CN/HK/GL) |
-| Industry adapters | 8 industry revenue driver formulas |
-| Fundamental driver model | Revenue/gross-margin/cost/cash flow/ROIC driver trees |
-| Competition and share model | TAM/SAM/SOM + value chain + moats + competitor reverse-engineering |
-| Implied expectation | Reverse-engineer CAGR, margin, share, multiple priced in |
-| Data audit | Source, date, unit, currency, accounting basis reliability |
-| Data meaning | Explain what data means instead of only listing numbers |
-| 3-scenario valuation | Bear/Base/Bull + probability-weighted value |
-| Price Level Engine | Multi-zone price anchors (valuation/market/account/trigger) |
-| Portfolio execution | Separate company research from account-level action |
-| Bear case | Actively search for strongest opposing evidence |
-| Falsification framework | Core judgment thresholds + data sources + trigger actions |
-| Report gatekeeper v2.1 | 3-tier + 3-grade + 3-mode release quality check |
-
----
-
-## Why This Project Exists
-
-If you ask AI:
-
-```text
-Can I buy this company now?
-```
-
-it is easy to receive an answer like:
-
-```text
-The company has solid long-term fundamentals, but there is short-term uncertainty, so investors should be cautious.
-```
-
-That kind of answer sounds complete, but it often fails to answer the questions that matter for actual research:
-
-- Is the current macro environment favorable or unfavorable?
-- Which sectors are receiving capital flows?
-- Has the institutional consensus already been priced in?
-- Are the data sources reliable?
-- What do the data actually mean?
-- Is there a margin of safety in valuation?
-- Does the user's own account allow action?
-- What would invalidate the conclusion?
-- What variables should trigger the next review?
-
-Meridian Research Engine 2.0 is not trying to answer whether AI can analyze. It is trying to make AI analysis more disciplined, auditable, and closer to a real research process.
-
----
-
-## Standard research workflow
-
-```text
-Select market adapter (US/CN/HK/GL)
-→ Select industry adapter (8 industry models)
-→ Macro consensus + 6-factor macro scoring
-→ Market pricing and consensus validation
-→ Sector rotation + 3-gate check
-→ Industry position
-→ Company fundamentals (6 dimensions)
-→ Data reliability audit (10 mandatory checks)
-→ Key data cards + core variable ranking
-→ Fundamental driver model (revenue → gross margin → cost → cash flow → ROIC)
-→ Competition and share model (TAM/SAM/SOM → moats → competitor reverse-engineering)
-→ Valuation and margin of safety (3 scenarios + probability-weighted value)
-→ Implied expectation reverse-engineering
-→ Price Level Engine
-→ Portfolio execution
-→ Bear case / reverse argument
-→ Falsification framework (thresholds + triggers)
-→ Four-layer judgment (company/valuation/account/review)
-→ Final action framework (4 disciplines)
-→ Maximum risk + next review triggers
-→ Gatekeeper v2.1 release check
-```
-
-The goal: **prevent AI from jumping directly to a conclusion.**
-
-A formal report must not only say:
-
-```text
-Long-term bullish, short-term volatile.
-Valuation is reasonable, but risks should be monitored.
-Buy if it drops to a round number.
-Sell if it rises to a round number.
-```
-
-It must explain:
-
-- why the judgment is made;
-- which data support it;
-- which data argue against it;
-- what valuation logic the current price implies;
-- whether the current account allows action;
-- what would invalidate the conclusion;
-- what to review next.
-
----
-
-## Workflow entrypoints
-
-| Entry point | Purpose |
-|---|---|
-| `/macro-sector-rotation` | Macro and sector-rotation analysis |
-| `/stock-research` | Full single-company research |
-| `/earnings-review` | Earnings review and attribution |
-| `/news-pulse` | Price-move and news-pulse attribution |
-| `/portfolio-review` | Portfolio review and account-execution check |
-| `/qdii-review` | QDII / ETF review |
-| `/industry-funnel` | Industry funnel screening |
-| `/buy-checklist` | Pre-buy checklist |
-| `/sell-checklist` | Pre-sell checklist |
-| `/data-audit` | Dedicated data-reliability audit |
-
-Examples:
-
-```text
-Run Meridian Research Engine 2.0 /macro-sector-rotation on the US stock market.
-Output macro six-factor score, institutional consensus and disagreement, market-pricing validation, favorable sectors, pressured sectors, and next review indicators.
-```
-
-```text
-Run Meridian Research Engine 2.0 /stock-research TICKER and use the English standard report template.
-```
-
----
-
-## Core Principles
+Core principles:
 
 ```text
 Look at the macro cycle before the company.
@@ -452,417 +259,69 @@ Look at sector rotation before industry position.
 A good company is not automatically a good price.
 A good price is not automatically suitable for the current account.
 Reliable data still needs correct interpretation.
-A research conclusion is not an operation instruction.
-A price level is a review condition, not a buy/sell signal.
+Every core conclusion must be falsifiable — risk statements without thresholds and actions are not complete risk analysis.
 ```
-
-A complete judgment should be split into four layers:
-
-```text
-Company view: Is this a good company?
-Valuation view: Is the current price attractive?
-Account view: Does the real position, cost basis, and cash level allow action?
-Trading view: Is the current state buy, sell, hold, wait, or review?
-```
-
-These layers must not be merged.
 
 ---
 
-## Macro and Sector Rotation Engine
+## v2.1.0-alpha: Data Integrity Hardlock
 
-The Macro and Sector Rotation Engine translates the macro environment into auditable sector and industry research context.
+The current version upgrades release gating from structure-level to data-integrity level. Formal release now requires both **Data Integrity Hardlock** (four layers: Data Card / Earnings Basis / Capital Structure Bridge / Industry Hard Fields) and Gatekeeper structure checks.
 
-It does not directly predict the economy. It combines three types of signals:
+```text
+No card, no conclusion.
+No basis, no formal valuation.
+No bridge, no PE.
+No industry hard fields, no FULL_PASS.
+```
 
-1. official and quasi-official macro data;
-2. mainstream asset-manager and investment-bank views;
-3. market pricing and high-frequency indicators.
+---
 
-The system reviews six macro factors:
+## Current version and roadmap
 
-| Factor | Core question |
+| Field | Value |
 |---|---|
-| Growth | Is the economy accelerating, slowing, or diverging? |
-| Inflation | Is inflation rising, falling, or sticky? |
-| Liquidity | Is the central-bank environment easing, neutral, or tightening? |
-| Credit | Is financing expanding or contracting? |
-| Earnings | Are earnings expectations being revised up or down? |
-| Risk appetite | Is the market taking risk or avoiding risk? |
-
-Macro judgment must not directly generate a buy/sell conclusion. A sector has to pass three gates:
-
-```text
-Gate 1: Does the macro wind support it?
-Gate 2: Is industry momentum verified?
-Gate 3: Are valuation and trading crowding reasonable?
-```
-
-Only after all three gates pass should a sector enter the priority research list.
-
----
-
-## Nine-Agent Research System
-
-| Agent | Responsibility |
-|---|---|
-| Macro Consensus Agent | Collect official, institutional, and market-pricing macro signals; identify consensus, disagreement, and stale views. |
-| Asset Rotation Agent | Judge fund flows, sector rotation, trading crowding, and whether market pricing already reflects institutional consensus. |
-| Industry Position Agent | Assess industry stage, competitive structure, company alpha, and industry beta. |
-| Company Fundamental Agent | Assess revenue quality, profit quality, cash-flow quality, and capital allocation quality. |
-| Valuation & Margin Agent | Assess valuation level, margin of safety, and scenario valuation. |
-| Portfolio Execution Agent | Review real holdings, cost basis, cash, margin, base position, and trading position. |
-| Data Auditor Agent | Audit data source, accounting basis, timestamp, currency, unit, and reliability. |
-| Bear Case Agent | Search for the strongest opposing evidence and attack the current conclusion. |
-| Team Lead Agent | Integrate conflicts, assign weights, and form the final research memo. |
-
-Each agent must answer more than a conclusion:
-
-```text
-What is the key data?
-What does the data mean?
-Is it improving or worsening versus the prior period?
-How does it compare with history, expectations, and peers?
-How does it affect valuation?
-How does it affect portfolio action?
-What change would invalidate the current view?
-```
-
----
-
-## Data Reliability Engineering
-
-Every important data point should be audited for:
-
-- source tier;
-- data timestamp;
-- currency;
-- unit;
-- accounting basis;
-- one-time items;
-- whether it is an estimate;
-- whether it conflicts with other sources;
-- whether it can enter the final conclusion.
-
-| Tier | Source type | Use |
-|---|---|---|
-| S | Company filings, earnings releases, 10-K, 10-Q, 8-K, official macro data | Core factual basis |
-| A | Exchange data, authoritative databases, official fund data | Market, valuation, and macro validation |
-| B | Major financial media | Event context and market reaction |
-| C | Broker research, consulting reports, third-party estimates | Industry sizing, share, and forecast data |
-| D | Social media, forums, community discussion | Sentiment and leads only; not a factual basis |
-
-If data conflict, check first:
-
-```text
-Are the dates consistent?
-Are the currencies consistent?
-Are the units consistent?
-Are GAAP / Non-GAAP definitions consistent?
-Are TTM / quarterly / annual definitions consistent?
-Are one-time gains or expenses included?
-Is this forecast data rather than actual data?
-Is there a disclosure lag?
-```
-
-Do not simply average conflicting data points.
-
----
-
-## Data Meaning Interpretation
-
-This project rejects raw-data dumping.
-
-Weak version:
-
-```text
-Revenue grew, margin improved, and capital expenditure increased.
-```
-
-Better version:
-
-```text
-Revenue growth shows that the core business is still growing, but rising capital expenditure may shift market attention from revenue growth to free-cash-flow conversion quality. This data can support continued research or holding, but it does not automatically support adding exposure.
-```
-
-Each key data point should answer:
-
-```text
-Data fact: what is the number?
-Data source: where did it come from and what is its source tier?
-Data meaning: what does it indicate?
-Marginal change: is it better or worse than the prior period?
-Relative comparison: how does it compare with history, expectations, and peers?
-Valuation impact: does it raise or lower valuation tolerance?
-Action impact: does it support buy, hold, trim, or only observe?
-Invalidation condition: what would overturn the interpretation?
-```
-
----
-
-## Valuation and Margin of Safety
-
-Valuation must explain how the value range is derived, instead of only saying that valuation is reasonable.
-
-At minimum, it should answer:
-
-```text
-Is the anchor PE, forward PE, FCF yield, EV/EBITDA, or something else?
-How is normalized EPS / FCF calculated?
-Where does the current valuation sit versus history, peers, and business quality?
-Which variables drive bear, base, and bull cases?
-What would move the valuation range up or down?
-```
-
-A valuation conclusion can describe margin of safety and tolerance. It cannot replace account-level action.
-
----
-
-## Price Level Engine
-
-The Price Level Engine does not output mechanical buy/sell signals such as:
-
-```text
-Buy when the price drops to a round number.
-Sell when the price rises to a round number.
-```
-
-It helps split a price zone into five dimensions:
-
-```text
-1. Valuation anchor: what normalized EPS / FCF multiple does the price imply?
-2. Market anchor: is the price near trading congestion, support, or resistance?
-3. Personal cost anchor: is it near the user's own cost, management cost, or trading-position cost?
-4. Position constraint: do current weight, cash, and margin allow action?
-5. Fundamental trigger: do key business data support the validity of this zone?
-```
-
-The same price can mean very different things to different investors:
-
-```text
-User A has no position and enough cash; the price may only enter the watch zone.
-User B is already concentrated and cash-light; the only reasonable action may be to wait.
-User C has a low cost basis and heavy exposure; adding risk may be inappropriate.
-User D uses margin; risk reduction may come first.
-```
-
-Core rule:
-
-```text
-Price is a necessary condition, not a sufficient condition.
-```
-
----
-
-## Portfolio Execution
-
-Even if a company is good, the report still has to answer:
-
-```text
-How much does the user currently hold?
-What is the account cost basis?
-What is the management cost?
-Is there already a base position?
-Is it a trading position?
-What is the cash ratio?
-Is margin being used?
-Can the account tolerate further downside?
-Would the position become too large after action?
-```
-
-Management-cost formula:
-
-```text
-Management cost = invested capital remaining in the current position - realized gains
-Management cost per share = management cost / remaining shares
-```
-
-`tools/portfolio_cost.py` calculates aggregate management cost for portfolio-management review. It is not tax-lot cost and not FIFO / LIFO tax accounting.
-
----
-
-## Bear Case and Report Gatekeeper
-
-The bear case is not decoration. It must actively attack the main conclusion:
-
-```text
-If the view is positive, what is the strongest negative evidence?
-If the view is cautious, what is the strongest positive evidence?
-If the view is to continue holding, is that a lazy decision?
-Which data changes would overturn the current conclusion?
-```
-
-The Report Gatekeeper checks whether a report is ready to be used. At minimum, it checks:
-
-- required sections;
-- whether data have source, date, basis, unit, and currency;
-- vague conclusions;
-- whether company, valuation, account, and trading judgments are mixed together;
-- whether account-level actions are output without account data;
-- whether invalidation conditions and review triggers are preserved.
-
----
-
-## Report gatekeeper
-
-Chinese report:
-
-```bash
-python tools/report_gatekeeper.py reports/SAMPLE_research_report_zh.md --language zh
-```
-
-English report:
-
-```bash
-python tools/report_gatekeeper.py reports/SAMPLE_research_report_en.md --language en
-```
-
-The gatekeeper checks: 25 canonical section headings, vague phrases, bilingual heading mixing, and key data field completeness.
-
----
-
-## Repository structure
-
-```text
-meridian-research-engine-v2/
-├── README.md                  # This file (Chinese)
-├── README_EN.md               # English README
-├── CHANGELOG.md               # Version changelog
-├── SKILL.md                   # Agent skill file
-├── LICENSE                    # MIT License
-├── NOTICE                     # Original project copyright
-├── requirements.txt           # Python dependencies
-├── test_comprehensive.py      # Comprehensive test suite
-│
-├── agents/                    # Research agent definitions (10 agents)
-├── workflows/                 # Workflow templates (10 workflows)
-├── templates/                 # Report templates (17 templates)
-├── tools/                     # Core tools (14 CLI tools)
-├── examples/                  # Example data (5 files)
-├── tests/                     # Unit tests (7 test files)
-├── reports/                   # Report output examples
-│   ├── SAMPLE_research_report_zh.md
-│
-└── docs/                      # Documentation (18 doc files)
-    ├── quickstart_usage.md
-    ├── market_adapters.md              
-    ├── industry_adapters.md            
-    ├── fundamental_driver_model.md     
-    ├── competition_share_model.md      
-    ├── implied_expectation_model.md    
-    ├── falsification_framework.md      
-    ├── data_quality_checklist.md       
-    ├── language_policy.md
-    ├── report_export.md
-    ├── macro_sector_rotation.md
-    ├── data_reliability.md
-    ├── architecture.md
-    ├── methodology.md
-    ├── legal_compliance.md
-    ├── disclaimer.md
-    └── price_level_engine.md
-```
-
----
-
-## Who this is for
-
-**For:**
-- Investors who want AI-assisted research without AI-generated fluff.
-- Users who need an integrated framework covering macro, sector, company, and account-level analysis.
-- Users who value data audit, bear case arguments, and disciplined review.
-- Active portfolio holders who need account-aware research.
-- Anyone building a long-term investment research workflow.
-
-**Not for:**
-- Automated stock picks or trading signals.
-- "What should I buy today — what will go up tomorrow" type queries.
-- Users unwilling to verify data and conduct regular reviews.
-
----
-
-## Roadmap
-
-**Completed:**
-- [x] Standard report templates (CN/EN, 25 canonical sections)
-- [x] Report language detection and separate CN/EN templates
-- [x] Word / PDF report export documentation
-- [x] English README
-- [x] Quick-start and usage documentation
-- [x] Automated test workflow (GitHub Actions)
-- [x] Restore and lock workflow entrypoint documentation
-- [x] Global framework: market adapters (US/CN/HK/GL) + industry adapters (8 models)
-- [x] Fundamental driver model (revenue/gross margin/cost/cash flow/ROIC driver trees)
-- [x] Competition and share model (TAM/SAM/SOM + value chain + moats + competitor reverse-engineering)
-- [x] Implied expectation reverse-engineering model
-- [x] Falsification framework (thresholds + data sources + trigger actions)
-- [x] Data quality checklist (10 mandatory validations)
-- [x] Gatekeeper v2.1 (3-tier/3-grade/3-mode + 10 downgrade rules)
-- [x] Comprehensive test suite (test_comprehensive.py)
-
-**To do:**
-- [ ] Improve the data-source registry
-- [ ] Add automatic Data Point Card generation
-- [ ] Add data cross-validation tooling
-- [ ] Add a macro-view card generator
-- [ ] Add helper logic for whether market pricing already reflects institutional consensus
-- [ ] Add QDII premium and subscription-limit checks
-- [ ] Add portfolio concentration risk reports
-- [ ] Add automated Word / PDF export commands
-
----
-
-## Version info
-
-Current public version: **v2.0.0-beta** (Meridian Research Engine 2.0 initial release)
+| Current version | **v2.2.0-beta** (feat/v2.2-full-chain-research-ux) |
+| Initial release | v2.0.0-beta |
+| Next milestone | v2.3.0 (Validation Lab integration) |
+| Repository | pencilyu1102-pixel/meridian-research-engine-v2 |
 
 | Version | Date | Key Changes |
 |---|---|---|
-| **v2.0.0-beta** | 2026-07-04 | **Meridian Research Engine 2.0 initial public-facing release** |
+| **v2.2.0-beta** | 2026-07 | Source Policy SABCD unified admission, Validator report binding & Bundle Hash, PASS_TEST_ONLY release system, valuation_denominator critical field, invalid freshness rejection |
+| **v2.1.0-alpha** | 2026-07 | Data Integrity Hardlock: 4-layer hardlock + 10 downgrade rules, Data Card/Earnings Basis/Capital Bridge/Industry Hard Fields |
+| **v2.0.1-beta** | 2026-07 | CI hardening, public SAMPLE boundary enforcement, Gatekeeper CLI compatibility fixes |
+| **v2.0.0-beta** | 2026-07 | Initial launch: market/industry adapters, fundamental drivers, competition share, implied expectations, falsification framework, Gatekeeper v2.1, 25-section templates, comprehensive test suite |
 
 See [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
-## Credits / Project origin
+## Credits
 
-The original upstream project of Meridian Research Engine 2.0 is the MIT-licensed open-source project `xbtlin/ai-berkshire`.
+The original upstream project is the MIT-licensed open-source project `xbtlin/ai-berkshire`. Ada Pan and topgunsyang-dotcom co-created, reorganized, and extended the workflow around AI-assisted equity research, data audit, macro-cycle analysis, sector rotation, bear-case reasoning, falsification framework, and Gatekeeper release checks.
 
-Based on that upstream project, Ada Pan and topgunsyang-dotcom co-created, reorganized, and extended the workflow around AI-assisted equity research, data audit, macro-cycle analysis, sector rotation, bear-case reasoning, falsification framework, and Gatekeeper release checks. The current repository is the initial public-facing Meridian Research Engine 2.0 release.
-
-This project is not the official AI Berkshire project and does not represent xbtlin or the upstream maintainers. It is also not an official project of any broker, investment adviser, exchange, data provider, financial institution, or company.
-
-The original upstream copyright notice and MIT License terms are retained in LICENSE and NOTICE.
+This project is not the official AI Berkshire project and does not represent any broker, investment adviser, financial institution, or company. The original upstream copyright notice and MIT License terms are retained in [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
 
 ---
 
-## Final Reminder
+## Final reminder
 
-The purpose of Meridian Research Engine 2.0 is not to make AI more persuasive.
-
-Its purpose is to make AI harder to persuade you too easily.
-
-A truly mature research system does not always produce an exciting conclusion. It helps you:
+The purpose of Meridian Research Engine is not to make AI more persuasive. Its purpose is to make AI **harder** to persuade you too easily.
 
 ```text
-see the bigger trend;
-identify rotation;
-verify data;
-understand variables;
-identify risks;
-control position size;
-preserve cash;
-wait for opportunities that are actually worth taking risk for.
+See the bigger trend. Identify rotation. Verify data. Understand variables.
+Identify risks. Control position size. Preserve cash. Wait for opportunities worth taking risk for.
 ```
 
-Often, the best investment action is neither buy nor sell, but:
-
-```text
-Do not act before you understand.
-```
+Often, the best investment action is neither buy nor sell, but: **Do not act before you understand.**
 
 ---
 
 ## License
 
 MIT License. See [`LICENSE`](LICENSE).
+
+---
+
+中文说明见：[README.md](README.md)

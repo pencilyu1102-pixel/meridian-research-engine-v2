@@ -1,0 +1,85 @@
+{
+  "_bundle_dir": "/Users/adapan/meridian-research-engine-v2/examples/full_chain_sample",
+  "capital_structure_bridge": {
+    "bridge_completed": true,
+    "current_price": "142.50",
+    "current_shares": "2000000000",
+    "denominator_explanation": "2.0B diluted shares per synthetic fixture; ADS ratio 1:1",
+    "eps": "5.70",
+    "fields_present": [
+      "current_price",
+      "market_cap",
+      "current_shares",
+      "eps",
+      "pe"
+    ],
+    "market": "US_STOCK",
+    "market_cap": "285000000000",
+    "market_cap_tolerance_pct": "0.03",
+    "pe": "25.0",
+    "pe_tolerance_pct": "0.03",
+    "share_basis_usage_explanation": "Diluted share count used consistently across EPS, PE, and market cap"
+  },
+  "data_cards": {
+    "description": "Synthetic data cards with 12 financial fields including revenue segment breakdown",
+    "path": "synthetic_data_cards.json"
+  },
+  "earnings_basis": {
+    "basis": "gaap_actual",
+    "explicit_approval": true,
+    "has_gaap_anchor": true,
+    "usage_context": "trailing_eps",
+    "verified": true
+  },
+  "industry_hard_fields": {
+    "adapter": "US_MANAGED_CARE",
+    "path": "synthetic_industry_fields.json"
+  },
+  "macro_factors": {
+    "data_provenance": "SYNTHETIC_FIXTURE",
+    "description": "Synthetic macro environment for US managed care demo — NOT real economic data",
+    "factors": {
+      "credit": {
+        "notes": "Synthetic: Credit spreads narrowing",
+        "score": 1,
+        "source": "SYNTHETIC_FIXTURE_MACRO"
+      },
+      "earnings": {
+        "notes": "Synthetic: S&P 500 earnings revisions positive",
+        "score": 1,
+        "source": "SYNTHETIC_FIXTURE_MACRO"
+      },
+      "growth": {
+        "notes": "Synthetic: US GDP moderate expansion ~2.4%",
+        "score": 1,
+        "source": "SYNTHETIC_FIXTURE_MACRO"
+      },
+      "inflation": {
+        "notes": "Synthetic: Core PCE ~2.6%, near target",
+        "score": 0,
+        "source": "SYNTHETIC_FIXTURE_MACRO"
+      },
+      "liquidity": {
+        "notes": "Synthetic: Fed pause, financial conditions easing",
+        "score": 1,
+        "source": "SYNTHETIC_FIXTURE_MACRO"
+      },
+      "risk_appetite": {
+        "notes": "Synthetic: Market sentiment neutral",
+        "score": 0,
+        "source": "SYNTHETIC_FIXTURE_MACRO"
+      }
+    }
+  },
+  "meta": {
+    "as_of_date": "2026-07-01",
+    "bundle_sha256": "72bf671343ec55858982a5c9adb6939c710a8c81481e88b0e2e9b87e5b31623b",
+    "bundle_version": "1.0",
+    "data_provenance": "SYNTHETIC_FIXTURE",
+    "description": "Synthetic research bundle for offline full-chain demo. All data is fabricated — no real companies, markets, or prices.",
+    "industry_adapter": "US_MANAGED_CARE",
+    "market": "US_STOCK",
+    "research_id": "SAMPLE_MANAGED_CARE_DEMO_V1",
+    "symbol": "SAMPLE_MANAGED_CARE"
+  }
+}

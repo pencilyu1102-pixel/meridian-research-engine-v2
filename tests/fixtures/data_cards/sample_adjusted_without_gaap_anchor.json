@@ -4,5 +4,7 @@
   "explicit_approval": false,
   "verified": true,
   "has_gaap_anchor": false,
-  "ticker": "SAMPLE_US_HEALTH"
+  "ticker": "SAMPLE_US_HEALTH",
+  "freshness_status": "current",
+  "has_conflict": false
 }

@@ -1,0 +1,60 @@
+{
+  "industry_adapter": "US_MANAGED_CARE",
+  "fields": {
+    "mcr_or_mlr": {
+      "present": true,
+      "can_enter_conclusion": "full",
+      "notes": "Synthetic fixture: Medical Cost Ratio 85.2%, within target range 84-86%"
+    },
+    "utilization_trend": {
+      "present": true,
+      "can_enter_conclusion": "full",
+      "notes": "Synthetic fixture: Utilization trending +2.1% YoY, in line with seasonal norms"
+    },
+    "medicare_advantage": {
+      "present": true,
+      "can_enter_conclusion": "full",
+      "notes": "Synthetic fixture: Medicare Advantage membership 4.8M, +6% YoY"
+    },
+    "insurance_segment": {
+      "present": true,
+      "can_enter_conclusion": "full",
+      "notes": "Synthetic fixture: Insurance segment revenue $24B (MA premiums), operating margin 5.8%"
+    },
+    "health_services_segment": {
+      "present": true,
+      "can_enter_conclusion": "full",
+      "notes": "Synthetic fixture: Health services segment revenue $10B, operating margin 8.2%"
+    },
+    "pharmacy_or_care_services": {
+      "present": true,
+      "can_enter_conclusion": "full",
+      "notes": "Synthetic fixture: Pharmacy care services revenue $8B, scripts +4.2% YoY"
+    },
+    "doj_risk": {
+      "present": true,
+      "can_enter_conclusion": "full",
+      "notes": "Synthetic fixture: No material DOJ investigations disclosed"
+    },
+    "cms_risk": {
+      "present": true,
+      "can_enter_conclusion": "full",
+      "notes": "Synthetic fixture: CMS Star Ratings 4.0, no regulatory actions pending"
+    },
+    "ftc_risk": {
+      "present": true,
+      "can_enter_conclusion": "full",
+      "notes": "Synthetic fixture: No material FTC antitrust actions pending"
+    },
+    "oig_risk": {
+      "present": true,
+      "can_enter_conclusion": "full",
+      "notes": "Synthetic fixture: OIG compliance program in place, no active audits"
+    },
+    "sec_risk": {
+      "present": true,
+      "can_enter_conclusion": "full",
+      "notes": "Synthetic fixture: No material SEC investigations or restatements"
+    }
+  }
+}

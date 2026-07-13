@@ -10,6 +10,8 @@
     "currency": "USD",
     "accounting_basis": "gaap_actual",
     "can_enter_conclusion": "full",
-    "notes": "Unknown source tier for negative test"
+    "notes": "Unknown source tier for negative test",
+    "freshness_status": "current",
+    "has_conflict": false
   }
 ]
