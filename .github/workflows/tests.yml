@@ -40,7 +40,7 @@ jobs:
           PYTHONPATH: ${{ github.workspace }}
         run: |
           python scripts/validate_agent_report.py \
-            --report outputs/agent_demo/SAMPLE_MANAGED_CARE_agent_report_bound_zh.md \
+            --report tests/fixtures/agent_demo/SAMPLE_MANAGED_CARE_agent_report_bound_zh.md \
             --bundle examples/full_chain_sample/research_bundle.json \
             --output ci_validation.json
 
