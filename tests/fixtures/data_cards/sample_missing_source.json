@@ -9,6 +9,8 @@
     "currency": "CNY",
     "accounting_basis": "gaap_actual",
     "can_enter_conclusion": "full",
-    "notes": "Missing source for negative test"
+    "notes": "Missing source for negative test",
+    "freshness_status": "current",
+    "has_conflict": false
   }
 ]

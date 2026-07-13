@@ -50,6 +50,8 @@ def test_complete_metadata_input_can_pass_formal_and_transmit_provenance():
         "period": "TTM",
         "source_tier": "A",
         "can_enter_conclusion": "full",
+        "freshness_status": "current",
+        "has_conflict": False,
     }
     verdict = evaluate_tool_metadata(metadata)
     scenario = calculate_valuation_scenarios("10.00", "12", "14", "16", metadata=metadata)

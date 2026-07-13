@@ -1,22 +1,22 @@
-"""Metadata guardrails for valuation tools.
-
-Bare numeric inputs may still be calculated, but outputs must be downgraded to
-CALC_ONLY_NOT_FOR_CONCLUSION unless complete provenance metadata is supplied.
-"""
+"""Metadata guardrails for valuation tools — delegates to tools.source_policy."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Mapping
 
-STATUS_PASS_FORMAL = "PASS_FORMAL"
+from tools.source_policy import (
+    ALLOWED_PERMISSIONS,
+    ALLOWED_SOURCE_TIERS,
+    STATUS_FAIL_SOURCE_PERMISSION,
+    STATUS_PASS_FORMAL,
+    check_source_admission,
+)
+
 STATUS_PASS_TEST_ONLY = "PASS_TEST_ONLY"
 STATUS_CALC_ONLY_NOT_FOR_CONCLUSION = "CALC_ONLY_NOT_FOR_CONCLUSION"
-STATUS_FAIL_SOURCE_PERMISSION = "FAIL_SOURCE_PERMISSION"
 
-REQUIRED_METADATA_FIELDS = ("basis", "period", "source_tier", "can_enter_conclusion")
-ALLOWED_SOURCE_TIERS = {"A", "B", "C", "D"}
-ALLOWED_CONCLUSION_PERMISSIONS = {"full", "reference_only", "blocked"}
+REQUIRED_METADATA_FIELDS = ("basis", "period", "source_tier", "can_enter_conclusion", "freshness_status", "has_conflict")
 
 
 @dataclass(frozen=True)
@@ -30,7 +30,11 @@ class ToolMetadataVerdict:
         return self.status == STATUS_PASS_FORMAL
 
 
-def evaluate_tool_metadata(metadata: Mapping[str, Any] | None) -> ToolMetadataVerdict:
+def evaluate_tool_metadata(
+    metadata: Mapping[str, Any] | None,
+    *,
+    data_provenance: str | None = None,
+) -> ToolMetadataVerdict:
     if not metadata:
         return ToolMetadataVerdict(
             status=STATUS_CALC_ONLY_NOT_FOR_CONCLUSION,
@@ -56,10 +60,26 @@ def evaluate_tool_metadata(metadata: Mapping[str, Any] | None) -> ToolMetadataVe
         )
 
     conclusion_permission = str(normalized["can_enter_conclusion"])
-    if conclusion_permission not in ALLOWED_CONCLUSION_PERMISSIONS:
+    if conclusion_permission not in ALLOWED_PERMISSIONS:
         return ToolMetadataVerdict(
             status=STATUS_FAIL_SOURCE_PERMISSION,
             violations=(f"unknown can_enter_conclusion: {conclusion_permission}",),
+            provenance={"provided": True, **normalized, "missing_fields": []},
+        )
+
+    # Delegate to unified policy
+    card = {
+        "field_name": metadata.get("field_name", "unknown"),
+        "source_tier": source_tier,
+        "can_enter_conclusion": conclusion_permission,
+        "freshness_status": metadata.get("freshness_status", "unknown"),
+        "has_conflict": metadata.get("has_conflict", False),
+    }
+    sp = check_source_admission(card, data_provenance=data_provenance)
+    if sp.violations:
+        return ToolMetadataVerdict(
+            status=STATUS_FAIL_SOURCE_PERMISSION,
+            violations=sp.violations,
             provenance={"provided": True, **normalized, "missing_fields": []},
         )
 

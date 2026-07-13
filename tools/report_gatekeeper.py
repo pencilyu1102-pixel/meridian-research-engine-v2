@@ -341,7 +341,17 @@ def check_report(
     core_quality = check_core_quality(text, lang, mode)
 
     # ── Determine final status ──
-    hardlock_fail = legacy_hardlock["status"] == "FAIL"
+    legacy_hardlock_fail = legacy_hardlock["status"] == "FAIL"
+
+    # When a formal structured hardlock passes, text heuristics become
+    # warnings rather than blocking gates.  Rule-description text such as
+    # "缺少有效股价则不可准出" must not override a PASS_FORMAL verdict.
+    external_hardlock_is_formal = (
+        hardlock_verdict is not None
+        and str(hardlock_verdict.get("status", "")) == "PASS_FORMAL"
+    )
+    hardlock_fail = legacy_hardlock_fail and not external_hardlock_is_formal
+
     template_fail = template["status"] != "PASS"
     core_fail = core_quality["status"] in ("FAIL_CONTENT_DEPTH",)
 
@@ -375,6 +385,10 @@ def check_report(
         final_status = "PASS_TEST_ONLY"
         release_decision = "不可准出"
         failure_family = "FAIL_DATA_HARDLOCK"
+    elif external_hardlock_status == "PASS_TEST_ONLY":
+        final_status = "PASS_TEST_ONLY"
+        release_decision = "TEST_ONLY_NOT_RELEASABLE"
+        failure_family = ""
     elif external_hardlock_status == "PASS_FORMAL":
         final_status = "FULL_PASS"
         release_decision = "可准出"
@@ -389,7 +403,15 @@ def check_report(
 
     # Build required fixes
     fixes: list[str] = []
-    if hardlock_fail:
+    warnings: list[str] = []
+
+    if legacy_hardlock_fail and external_hardlock_is_formal:
+        # Text heuristic flagged issues but structured hardlock passed —
+        # likely rule-description text in the report body.  Downgrade to
+        # warning rather than blocking.
+        for detail in legacy_hardlock["details"]:
+            warnings.append(f"文本启发式标记: {detail}（结构化Hardlock已通过，可能是规则说明文本触发的误报）")
+    elif hardlock_fail:
         for detail in legacy_hardlock["details"]:
             if detail == "missing_price":
                 fixes.append("补充最新股价")
@@ -425,6 +447,7 @@ def check_report(
         "can_be_used_as_formal_report": can_formal,
         "can_be_used_as_framework_test": can_test,
         "required_fixes": fixes,
+        "warnings": warnings,
         "_language": lang,
         "_mode": mode,
     }

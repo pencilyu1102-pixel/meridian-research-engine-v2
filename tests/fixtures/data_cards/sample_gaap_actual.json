@@ -4,5 +4,7 @@
   "explicit_approval": false,
   "verified": true,
   "has_gaap_anchor": true,
-  "ticker": "SAMPLE_CN_GROWTH"
+  "ticker": "SAMPLE_CN_GROWTH",
+  "freshness_status": "current",
+  "has_conflict": false
 }

@@ -1,4 +1,4 @@
-"""Data card registry and validation helpers for Data Integrity Hardlock."""
+"""Data card registry and validation — delegates source policy to tools.source_policy."""
 
 from __future__ import annotations
 
@@ -6,6 +6,15 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Mapping, Sequence
+
+from tools.source_policy import (
+    ALLOWED_PERMISSIONS,
+    ALLOWED_SOURCE_TIERS,
+    STATUS_FAIL_DATA_CARD_MISSING,
+    STATUS_FAIL_SOURCE_PERMISSION,
+    STATUS_PASS_FORMAL,
+    check_source_admission,
+)
 
 REQUIRED_FIELDS: tuple[str, ...] = (
     "field_name",
@@ -19,12 +28,9 @@ REQUIRED_FIELDS: tuple[str, ...] = (
     "accounting_basis",
     "can_enter_conclusion",
     "notes",
+    "freshness_status",
+    "has_conflict",
 )
-ALLOWED_SOURCE_TIERS = {"A", "B", "C", "D"}
-ALLOWED_CONCLUSION_FLAGS = {"full", "reference_only", "blocked"}
-STATUS_FAIL_DATA_CARD_MISSING = "FAIL_DATA_CARD_MISSING"
-STATUS_FAIL_SOURCE_PERMISSION = "FAIL_SOURCE_PERMISSION"
-STATUS_PASS_FORMAL = "PASS_FORMAL"
 
 
 @dataclass(frozen=True)
@@ -66,7 +72,7 @@ class DataCardRegistry:
     def get(self, field_name: str) -> dict[str, Any] | None:
         return self._cards.get(field_name)
 
-    def validate(self, field_name: str) -> DataCardValidationResult:
+    def validate(self, field_name: str, *, data_provenance: str | None = None) -> DataCardValidationResult:
         card = self.get(field_name)
         if card is None:
             return DataCardValidationResult(
@@ -74,16 +80,26 @@ class DataCardRegistry:
                 violations=(f"missing data card for field: {field_name}",),
                 card=None,
             )
-        return validate_data_card(card)
+        return validate_data_card(card, data_provenance=data_provenance)
 
-    def conclusion_permission(self, field_name: str) -> ConclusionPermission:
-        validation = self.validate(field_name)
+    def conclusion_permission(self, field_name: str, *, data_provenance: str | None = None) -> ConclusionPermission:
+        validation = self.validate(field_name, data_provenance=data_provenance)
         if not validation.is_valid or validation.card is None:
             return ConclusionPermission(False, False, validation.status)
-        return permission_from_card(validation.card)
+        sp = check_source_admission(validation.card, data_provenance=data_provenance)
+        return ConclusionPermission(
+            can_enter_conclusion=sp.can_enter_conclusion,
+            can_enter_primary_valuation=sp.can_enter_primary_valuation,
+            reason="; ".join(sp.violations) if sp.violations else sp.effective_permission,
+        )
 
 
-def validate_data_card(card: Mapping[str, Any]) -> DataCardValidationResult:
+def validate_data_card(
+    card: Mapping[str, Any],
+    *,
+    data_provenance: str | None = None,
+) -> DataCardValidationResult:
+    """Validate a data card: required fields, tier, permission, and admission policy."""
     missing_fields = [field for field in REQUIRED_FIELDS if field not in card]
     if missing_fields:
         return DataCardValidationResult(
@@ -101,10 +117,19 @@ def validate_data_card(card: Mapping[str, Any]) -> DataCardValidationResult:
         )
 
     conclusion_flag = card.get("can_enter_conclusion")
-    if conclusion_flag not in ALLOWED_CONCLUSION_FLAGS:
+    if conclusion_flag not in ALLOWED_PERMISSIONS:
         return DataCardValidationResult(
             status=STATUS_FAIL_SOURCE_PERMISSION,
             violations=(f"unknown can_enter_conclusion: {conclusion_flag}",),
+            card=dict(card),
+        )
+
+    # Delegate to unified source policy
+    sp = check_source_admission(card, data_provenance=data_provenance)
+    if sp.violations:
+        return DataCardValidationResult(
+            status=STATUS_FAIL_SOURCE_PERMISSION,
+            violations=sp.violations,
             card=dict(card),
         )
 
@@ -113,12 +138,3 @@ def validate_data_card(card: Mapping[str, Any]) -> DataCardValidationResult:
         violations=(),
         card=dict(card),
     )
-
-
-def permission_from_card(card: Mapping[str, Any]) -> ConclusionPermission:
-    conclusion_flag = card["can_enter_conclusion"]
-    if conclusion_flag == "full":
-        return ConclusionPermission(True, True, "full")
-    if conclusion_flag == "reference_only":
-        return ConclusionPermission(False, False, "reference_only")
-    return ConclusionPermission(False, False, "blocked")

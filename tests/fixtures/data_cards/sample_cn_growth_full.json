@@ -10,6 +10,8 @@
     "currency": "CNY",
     "accounting_basis": "gaap_actual",
     "can_enter_conclusion": "full",
-    "notes": "Synthetic sample for unit tests only"
+    "notes": "Synthetic sample for unit tests only",
+    "freshness_status": "current",
+    "has_conflict": false
   }
 ]
