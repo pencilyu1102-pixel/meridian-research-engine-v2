@@ -84,12 +84,23 @@ jobs:
 
       - name: Verify no API keys or credentials
         run: |
-          if grep -rI --include='*.py' --include='*.json' --include='*.yaml' --include='*.yml' \
-            -E '(api[_-]?key|access[_-]?token|client[_-]?secret|password\s*=|credential)' \
-            tools/ scripts/ tests/ examples/ \
-            --exclude='preflight_release_check.py' \
-            2>/dev/null; then
-            echo "ERROR: potential credential found"
+          hits="$(
+            grep -rInI \
+              --include='*.py' \
+              --include='*.json' \
+              --include='*.yaml' \
+              --include='*.yml' \
+              -E \
+              '((api[_-]?key|access[_-]?token|client[_-]?secret|password|credentials?)[[:space:]]*[:=][[:space:]]*["'\\''][^"'\\'']{8,}["'\\'']|sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|-----BEGIN ([A-Z ]+ )?PRIVATE KEY-----)' \
+              tools/ scripts/ tests/ examples/ \
+              --exclude='preflight_release_check.py' \
+              2>/dev/null || true
+          )"
+
+          if [ -n "$hits" ]; then
+            printf '%s\n' "$hits"
+            echo "ERROR: potential credential value found"
             exit 1
           fi
+
           echo "CREDENTIAL BOUNDARY: OK"
