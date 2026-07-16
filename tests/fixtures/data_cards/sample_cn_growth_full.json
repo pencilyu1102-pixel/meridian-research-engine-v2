@@ -12,6 +12,8 @@
     "can_enter_conclusion": "full",
     "notes": "Synthetic sample for unit tests only",
     "freshness_status": "current",
-    "has_conflict": false
+    "has_conflict": false,
+    "request_id": "SYNTHETIC::REGISTRY::sample_cn_growth_ttm_eps::CN_GROWTH",
+    "data_provenance": "SYNTHETIC_FIXTURE"
   }
 ]

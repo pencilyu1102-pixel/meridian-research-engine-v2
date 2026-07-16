@@ -17,7 +17,9 @@
     "can_enter_conclusion",
     "notes",
     "freshness_status",
-    "has_conflict"
+    "has_conflict",
+    "request_id",
+    "data_provenance"
   ],
   "properties": {
     "field_name": {"type": "string", "minLength": 1},
@@ -35,6 +37,16 @@
     },
     "notes": {"type": "string"},
     "freshness_status": {"type": "string", "enum": ["current", "stale", "unknown"]},
-    "has_conflict": {"type": "boolean"}
+    "has_conflict": {"type": "boolean"},
+    "request_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique request trace identifier"
+    },
+    "data_provenance": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Data origin marker (e.g. SYNTHETIC_FIXTURE)"
+    }
   }
 }

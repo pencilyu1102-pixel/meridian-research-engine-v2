@@ -12,6 +12,8 @@
     "can_enter_conclusion": "blocked",
     "notes": "Blocked sample for permission test",
     "freshness_status": "current",
-    "has_conflict": false
+    "has_conflict": false,
+    "request_id": "SYNTHETIC::REGISTRY::sample_background_metric::BLOCKED",
+    "data_provenance": "SYNTHETIC_FIXTURE"
   }
 ]

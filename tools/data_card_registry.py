@@ -30,6 +30,8 @@ REQUIRED_FIELDS: tuple[str, ...] = (
     "notes",
     "freshness_status",
     "has_conflict",
+    "request_id",
+    "data_provenance",
 )
 
 
@@ -108,6 +110,16 @@ def validate_data_card(
             card=dict(card),
         )
 
+    # Require request_id and data_provenance to be non-empty strings
+    for trace_field in ("request_id", "data_provenance"):
+        val = card.get(trace_field)
+        if not isinstance(val, str) or not val.strip():
+            return DataCardValidationResult(
+                status=STATUS_FAIL_DATA_CARD_MISSING,
+                violations=(f"{trace_field} must be a non-empty string",),
+                card=dict(card),
+            )
+
     source_tier = card.get("source_tier")
     if source_tier not in ALLOWED_SOURCE_TIERS:
         return DataCardValidationResult(
@@ -121,6 +133,17 @@ def validate_data_card(
         return DataCardValidationResult(
             status=STATUS_FAIL_SOURCE_PERMISSION,
             violations=(f"unknown can_enter_conclusion: {conclusion_flag}",),
+            card=dict(card),
+        )
+
+    # Provenance consistency: external expected must match Card field; never overwrite
+    if data_provenance is not None and data_provenance != card.get("data_provenance"):
+        return DataCardValidationResult(
+            status=STATUS_FAIL_SOURCE_PERMISSION,
+            violations=(
+                f"data_provenance mismatch: expected {data_provenance!r}, "
+                f"card has {card.get('data_provenance')!r}",
+            ),
             card=dict(card),
         )
 

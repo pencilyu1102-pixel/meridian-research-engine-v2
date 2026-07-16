@@ -12,7 +12,9 @@
     "can_enter_conclusion": "full",
     "notes": "Synthetic fixture price for offline demo — NOT real market data [SYNTHETIC_FIXTURE: blocked from formal conclusion]",
     "freshness_status": "current",
-    "has_conflict": false
+    "has_conflict": false,
+    "request_id": "SYNTHETIC::FULL_CHAIN::current_price",
+    "data_provenance": "SYNTHETIC_FIXTURE"
   },
   {
     "field_name": "market_cap",
@@ -27,7 +29,9 @@
     "can_enter_conclusion": "full",
     "notes": "Synthetic fixture market cap: 2.0B shares x $142.50 — NOT real market data [SYNTHETIC_FIXTURE: blocked from formal conclusion]",
     "freshness_status": "current",
-    "has_conflict": false
+    "has_conflict": false,
+    "request_id": "SYNTHETIC::FULL_CHAIN::market_cap",
+    "data_provenance": "SYNTHETIC_FIXTURE"
   },
   {
     "field_name": "shares_outstanding",
@@ -42,7 +46,9 @@
     "can_enter_conclusion": "full",
     "notes": "Synthetic fixture: 2.0B diluted shares — NOT real company data [SYNTHETIC_FIXTURE: blocked from formal conclusion]",
     "freshness_status": "current",
-    "has_conflict": false
+    "has_conflict": false,
+    "request_id": "SYNTHETIC::FULL_CHAIN::shares_outstanding",
+    "data_provenance": "SYNTHETIC_FIXTURE"
   },
   {
     "field_name": "eps_ttm",
@@ -57,7 +63,9 @@
     "can_enter_conclusion": "full",
     "notes": "Synthetic fixture: GAAP diluted EPS TTM — NOT real company data [SYNTHETIC_FIXTURE: blocked from formal conclusion]",
     "freshness_status": "current",
-    "has_conflict": false
+    "has_conflict": false,
+    "request_id": "SYNTHETIC::FULL_CHAIN::eps_ttm",
+    "data_provenance": "SYNTHETIC_FIXTURE"
   },
   {
     "field_name": "revenue_ttm",
@@ -72,7 +80,9 @@
     "can_enter_conclusion": "full",
     "notes": "Synthetic fixture: GAAP total revenue TTM $42B. Segment breakdown: Insurance $24B + Health Services $10B + Pharmacy $8B = $42B. Segments are mutually exclusive; revenue is not double-counted. — NOT real company data [SYNTHETIC_FIXTURE: blocked from formal conclusion]",
     "freshness_status": "current",
-    "has_conflict": false
+    "has_conflict": false,
+    "request_id": "SYNTHETIC::FULL_CHAIN::revenue_ttm",
+    "data_provenance": "SYNTHETIC_FIXTURE"
   },
   {
     "field_name": "revenue_insurance",
@@ -87,7 +97,9 @@
     "can_enter_conclusion": "full",
     "notes": "Synthetic fixture: Insurance segment (MA premiums) TTM $24B. Mutually exclusive with services segments; total revenue = insurance + services. — NOT real company data [SYNTHETIC_FIXTURE: blocked from formal conclusion]",
     "freshness_status": "current",
-    "has_conflict": false
+    "has_conflict": false,
+    "request_id": "SYNTHETIC::FULL_CHAIN::revenue_insurance",
+    "data_provenance": "SYNTHETIC_FIXTURE"
   },
   {
     "field_name": "revenue_health_services",
@@ -102,7 +114,9 @@
     "can_enter_conclusion": "full",
     "notes": "Synthetic fixture: Health services segment TTM $10B. Operating margin 8.2%. — NOT real company data [SYNTHETIC_FIXTURE: blocked from formal conclusion]",
     "freshness_status": "current",
-    "has_conflict": false
+    "has_conflict": false,
+    "request_id": "SYNTHETIC::FULL_CHAIN::revenue_health_services",
+    "data_provenance": "SYNTHETIC_FIXTURE"
   },
   {
     "field_name": "revenue_pharmacy",
@@ -117,7 +131,9 @@
     "can_enter_conclusion": "full",
     "notes": "Synthetic fixture: Pharmacy services segment TTM $8B. Scripts +4.2% YoY. — NOT real company data [SYNTHETIC_FIXTURE: blocked from formal conclusion]",
     "freshness_status": "current",
-    "has_conflict": false
+    "has_conflict": false,
+    "request_id": "SYNTHETIC::FULL_CHAIN::revenue_pharmacy",
+    "data_provenance": "SYNTHETIC_FIXTURE"
   },
   {
     "field_name": "fcf_ttm",
@@ -132,7 +148,9 @@
     "can_enter_conclusion": "full",
     "notes": "Synthetic fixture: Free cash flow TTM — NOT real company data [SYNTHETIC_FIXTURE: blocked from formal conclusion]",
     "freshness_status": "current",
-    "has_conflict": false
+    "has_conflict": false,
+    "request_id": "SYNTHETIC::FULL_CHAIN::fcf_ttm",
+    "data_provenance": "SYNTHETIC_FIXTURE"
   },
   {
     "field_name": "gross_margin",
@@ -147,7 +165,9 @@
     "can_enter_conclusion": "reference_only",
     "notes": "Synthetic fixture: GAAP gross margin — NOT real company data [SYNTHETIC_FIXTURE: blocked from formal conclusion]",
     "freshness_status": "current",
-    "has_conflict": false
+    "has_conflict": false,
+    "request_id": "SYNTHETIC::FULL_CHAIN::gross_margin",
+    "data_provenance": "SYNTHETIC_FIXTURE"
   },
   {
     "field_name": "revenue_growth_yoy",
@@ -162,6 +182,8 @@
     "can_enter_conclusion": "reference_only",
     "notes": "Synthetic fixture: YoY revenue growth — NOT real company data [SYNTHETIC_FIXTURE: blocked from formal conclusion]",
     "freshness_status": "current",
-    "has_conflict": false
+    "has_conflict": false,
+    "request_id": "SYNTHETIC::FULL_CHAIN::revenue_growth_yoy",
+    "data_provenance": "SYNTHETIC_FIXTURE"
   }
 ]
