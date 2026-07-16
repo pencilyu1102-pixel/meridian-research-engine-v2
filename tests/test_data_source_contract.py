@@ -506,6 +506,7 @@ class TestDataCardCompleteness:
             "field_name", "value", "source", "source_tier", "timestamp",
             "period", "unit", "currency", "accounting_basis",
             "can_enter_conclusion", "notes", "freshness_status", "has_conflict",
+            "request_id", "data_provenance",
         }
         for field in required:
             assert field in card, f"Missing required field: {field}"

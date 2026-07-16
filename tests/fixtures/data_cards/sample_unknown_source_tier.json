@@ -12,6 +12,8 @@
     "can_enter_conclusion": "full",
     "notes": "Unknown source tier for negative test",
     "freshness_status": "current",
-    "has_conflict": false
+    "has_conflict": false,
+    "request_id": "SYNTHETIC::REGISTRY::sample_us_health_ttm_eps::BAD_TIER",
+    "data_provenance": "SYNTHETIC_FIXTURE"
   }
 ]

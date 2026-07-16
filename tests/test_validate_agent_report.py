@@ -15,7 +15,8 @@ def _base_card(**kw):
     return {"field_name":"eps","value":"1","source":"x","source_tier":"S",
             "timestamp":"t","period":"p","unit":"u","currency":"c",
             "accounting_basis":"gaap","can_enter_conclusion":"full","notes":"",
-            "freshness_status":"current","has_conflict":False, **kw}
+            "freshness_status":"current","has_conflict":False,
+            "request_id":"SYNTHETIC::TEST::VAL::001","data_provenance":"SYNTHETIC_FIXTURE", **kw}
 
 def _run(r, b, o):
     return subprocess.run([sys.executable,"scripts/validate_agent_report.py",

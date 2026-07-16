@@ -6,7 +6,7 @@ symbol=SAMPLE_MANAGED_CARE
 market=US_STOCK
 industry_adapter=US_MANAGED_CARE
 as_of_date=2026-07-01
-bundle_sha256=72bf671343ec55858982a5c9adb6939c710a8c81481e88b0e2e9b87e5b31623b
+bundle_sha256=4b427323a2bb5ec4445a86b761e0ca5b27bedf9fee6440252523c0125357ee8a
 data_provenance=SYNTHETIC_FIXTURE
 -->
 

@@ -11,6 +11,8 @@
     "can_enter_conclusion": "full",
     "notes": "Missing timestamp for negative test",
     "freshness_status": "current",
-    "has_conflict": false
+    "has_conflict": false,
+    "request_id": "SYNTHETIC::REGISTRY::sample_cn_growth_ttm_eps::NO_TS",
+    "data_provenance": "SYNTHETIC_FIXTURE"
   }
 ]
