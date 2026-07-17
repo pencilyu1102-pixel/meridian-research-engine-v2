@@ -13,11 +13,9 @@ Explicitly NOT responsible for:
 
 from __future__ import annotations
 
-import json
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, Literal, Sequence
+from typing import Any, Sequence
 
 from tools.data_card_registry import validate_data_card
 from tools.data_source import DataSource, FetchFailure, FetchRequest
@@ -83,14 +81,34 @@ class DataSourceRunResult:
 
 @dataclass(frozen=True)
 class DataSourceBatchResult:
-    """Aggregate result for a batch of fetch requests through one DataSource."""
+    """Aggregate result for a batch of fetch requests through one DataSource.
+
+    All counts are derived from ``results`` in ``__post_init__`` — callers
+    cannot inject or override them via the constructor.
+    """
 
     results: tuple[DataSourceRunResult, ...]
-    total: int
-    validated_count: int
-    fetch_failed_count: int
-    contract_failed_count: int
-    validation_failed_count: int
+
+    total: int = field(init=False)
+    validated_count: int = field(init=False)
+    fetch_failed_count: int = field(init=False)
+    contract_failed_count: int = field(init=False)
+    validation_failed_count: int = field(init=False)
+
+    def __post_init__(self) -> None:
+        counts = {
+            DataSourceRunStatus.CARD_VALIDATED: 0,
+            DataSourceRunStatus.FETCH_FAILED: 0,
+            DataSourceRunStatus.CONTRACT_FAILED: 0,
+            DataSourceRunStatus.VALIDATION_FAILED: 0,
+        }
+        for r in self.results:
+            counts[r.status] += 1
+        object.__setattr__(self, "total", len(self.results))
+        object.__setattr__(self, "validated_count", counts[DataSourceRunStatus.CARD_VALIDATED])
+        object.__setattr__(self, "fetch_failed_count", counts[DataSourceRunStatus.FETCH_FAILED])
+        object.__setattr__(self, "contract_failed_count", counts[DataSourceRunStatus.CONTRACT_FAILED])
+        object.__setattr__(self, "validation_failed_count", counts[DataSourceRunStatus.VALIDATION_FAILED])
 
     @classmethod
     def from_results(
@@ -101,23 +119,7 @@ class DataSourceBatchResult:
 
         Counts are derived from the results — never accepted from callers.
         """
-        res_tuple = tuple(results)
-        counts = {
-            DataSourceRunStatus.CARD_VALIDATED: 0,
-            DataSourceRunStatus.FETCH_FAILED: 0,
-            DataSourceRunStatus.CONTRACT_FAILED: 0,
-            DataSourceRunStatus.VALIDATION_FAILED: 0,
-        }
-        for r in res_tuple:
-            counts[r.status] += 1
-        return cls(
-            results=res_tuple,
-            total=len(res_tuple),
-            validated_count=counts[DataSourceRunStatus.CARD_VALIDATED],
-            fetch_failed_count=counts[DataSourceRunStatus.FETCH_FAILED],
-            contract_failed_count=counts[DataSourceRunStatus.CONTRACT_FAILED],
-            validation_failed_count=counts[DataSourceRunStatus.VALIDATION_FAILED],
-        )
+        return cls(results=tuple(results))
 
     def to_dict(self) -> dict[str, Any]:
         """Return a JSON-serializable representation."""

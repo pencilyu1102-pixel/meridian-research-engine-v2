@@ -13,7 +13,6 @@ from typing import Any
 
 import pytest
 
-from tools.data_card_registry import STATUS_FAIL_DATA_CARD_MISSING, STATUS_FAIL_SOURCE_PERMISSION
 from tools.data_source import FetchFailure, FetchFailureReason, FetchRequest
 from tools.data_source_runner import (
     DataSourceBatchResult,
@@ -361,22 +360,45 @@ class TestRunBatch:
         assert len(calls) == 0
 
     def test_mixed_status_correctly_summarized(self):
-        """Batch with success + failure + contract + validation counts."""
-        # 1 success
-        ds_s = _make_ds(default_tier="S")
-        req_ok = _make_request(request_id="ok")
+        """Batch with one result of each of the four statuses."""
+        # CARD_VALIDATED
+        card_ok = _valid_card(request_id="r_ok")
+        ds_ok = FakeCardSource(card_ok)
+        r_ok = run_fetch(ds_ok, _make_request(request_id="r_ok"))
 
-        # 1 fetch failure
-        req_fail = _make_request(symbol="UNKNOWN_CO", field="current_price", request_id="fail")
+        # FETCH_FAILED
+        ds_fail = FakeFailSource()
+        r_fail = run_fetch(ds_fail, _make_request(request_id="r_fail"))
 
-        # Run them separately because they use different sources/requests
-        r_ok = run_fetch(ds_s, req_ok)
-        r_fail = run_fetch(ds_s, req_fail)
+        # CONTRACT_FAILED (request_id mismatch)
+        card_mismatch = _valid_card(request_id="BAD")
+        ds_contract = FakeCardSource(card_mismatch)
+        r_contract = run_fetch(ds_contract, _make_request(request_id="r_contract"))
 
-        batch = DataSourceBatchResult.from_results([r_ok, r_fail])
-        assert batch.total == 2
+        # VALIDATION_FAILED (missing required field)
+        card_invalid = _valid_card(request_id="r_invalid")
+        del card_invalid["freshness_status"]
+        ds_invalid = FakeCardSource(card_invalid)
+        r_invalid = run_fetch(ds_invalid, _make_request(request_id="r_invalid"))
+
+        batch = DataSourceBatchResult.from_results([r_ok, r_fail, r_contract, r_invalid])
+        assert batch.total == 4
         assert batch.validated_count == 1
         assert batch.fetch_failed_count == 1
+        assert batch.contract_failed_count == 1
+        assert batch.validation_failed_count == 1
+
+    def test_counts_cannot_be_faked(self):
+        """Caller cannot inject count fields — they are always derived from results."""
+        with pytest.raises(TypeError):
+            DataSourceBatchResult(results=(), total=100)  # type: ignore[call-arg]
+
+    def test_empty_batch_from_results(self):
+        """from_results with empty list yields all-zero counts."""
+        batch = DataSourceBatchResult.from_results([])
+        assert batch.total == 0
+        assert batch.validated_count == 0
+        assert batch.fetch_failed_count == 0
         assert batch.contract_failed_count == 0
         assert batch.validation_failed_count == 0
 
