@@ -1,0 +1,22 @@
+{
+  "symbol": "SAMPLE_MANAGED_CARE",
+  "data_provenance": "SYNTHETIC_FIXTURE",
+  "sources": {
+    "exchange": {"source_name": "SYNTHETIC_FIXTURE_EXCHANGE", "source_tier": "A"},
+    "company": {"source_name": "SYNTHETIC_FIXTURE_COMPANY", "source_tier": "A"},
+    "analyst": {"source_name": "SYNTHETIC_FIXTURE_ANALYST", "source_tier": "B"}
+  },
+  "requests": [
+    {"source_group":"exchange","field":"current_price","period":"2026-07-01","request_id":"SYNTHETIC::FULL_CHAIN::current_price"},
+    {"source_group":"exchange","field":"market_cap","period":"2026-07-01","request_id":"SYNTHETIC::FULL_CHAIN::market_cap"},
+    {"source_group":"company","field":"shares_outstanding","period":"Q2_2026","request_id":"SYNTHETIC::FULL_CHAIN::shares_outstanding"},
+    {"source_group":"company","field":"eps_ttm","period":"TTM_Q2_2026","request_id":"SYNTHETIC::FULL_CHAIN::eps_ttm"},
+    {"source_group":"company","field":"revenue_ttm","period":"TTM_Q2_2026","request_id":"SYNTHETIC::FULL_CHAIN::revenue_ttm"},
+    {"source_group":"company","field":"revenue_insurance","period":"TTM_Q2_2026","request_id":"SYNTHETIC::FULL_CHAIN::revenue_insurance"},
+    {"source_group":"company","field":"revenue_health_services","period":"TTM_Q2_2026","request_id":"SYNTHETIC::FULL_CHAIN::revenue_health_services"},
+    {"source_group":"company","field":"revenue_pharmacy","period":"TTM_Q2_2026","request_id":"SYNTHETIC::FULL_CHAIN::revenue_pharmacy"},
+    {"source_group":"company","field":"fcf_ttm","period":"TTM_Q2_2026","request_id":"SYNTHETIC::FULL_CHAIN::fcf_ttm"},
+    {"source_group":"analyst","field":"gross_margin","period":"TTM_Q2_2026","request_id":"SYNTHETIC::FULL_CHAIN::gross_margin"},
+    {"source_group":"analyst","field":"revenue_growth_yoy","period":"TTM_Q2_2026_vs_TTM_Q2_2025","request_id":"SYNTHETIC::FULL_CHAIN::revenue_growth_yoy"}
+  ]
+}

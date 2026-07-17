@@ -30,6 +30,7 @@ class SyntheticDataSource(DataSource):
         fixture_path: str | Path | None = None,
         *,
         default_tier: str = "S",
+        source_name: str = "SyntheticDataSource",
     ) -> None:
         """Create a SyntheticDataSource.
 
@@ -57,7 +58,7 @@ class SyntheticDataSource(DataSource):
             )
 
         super().__init__(
-            source_name="SyntheticDataSource",
+            source_name=source_name,
             default_tier=default_tier,
             data_provenance=PROVENANCE_SYNTHETIC,
         )
