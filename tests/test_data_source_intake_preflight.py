@@ -10,8 +10,8 @@ from pathlib import Path
 
 import pytest
 
-from tools.data_source import FetchRequest
-from tools.data_source_runner import DataSourceRunStatus, run_batch
+from tools.data_source import FetchFailure, FetchFailureReason, FetchRequest
+from tools.data_source_runner import DataSourceRunResult, DataSourceRunStatus, run_batch
 from tools.synthetic_data_source import SyntheticDataSource
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -224,3 +224,96 @@ def test_manifest_requests_use_one_symbol_and_unique_fields():
     assert all(request["request_id"].startswith("SYNTHETIC::FULL_CHAIN::") for request in manifest["requests"])
     assert len({request["field"] for request in manifest["requests"]}) == 11
     assert manifest["symbol"] == "SAMPLE_MANAGED_CARE"
+
+
+
+def test_cli_parity_failure_is_top_level_structured_json(tmp_path):
+    canonical = _load(CANONICAL_PATH)
+    canonical[0]["value"] = "WRONG"
+    bad_canonical = tmp_path / "bad_cards.json"
+    bad_canonical.write_text(json.dumps(canonical), encoding="utf-8")
+    result = subprocess.run(
+        [sys.executable, str(SCRIPT), "--canonical", str(bad_canonical)],
+        cwd=ROOT, capture_output=True, text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert result.returncode == 1
+    assert payload["status"] == "PREFLIGHT_FAIL"
+    assert "error" not in payload
+    assert payload["field_mismatches"]
+
+
+def test_fetch_failure_details_are_preserved_in_runner_failure_output():
+    from scripts.preflight_data_source_intake import ensure_all_validated
+
+    failure = FetchFailure(
+        reason=FetchFailureReason.FIELD_MISSING,
+        detail="fixture does not contain requested field",
+        request_id="r-fetch-fail",
+        timestamp="2026-07-17T00:00:00Z",
+        retry_allowed=False,
+    )
+    result = DataSourceRunResult(
+        status=DataSourceRunStatus.FETCH_FAILED,
+        request_id="r-fetch-fail",
+        symbol="SAMPLE_MANAGED_CARE",
+        field="missing_field",
+        failure=failure,
+    )
+    with pytest.raises(RuntimeError) as exc_info:
+        ensure_all_validated([result], source_group_by_request={"r-fetch-fail": "exchange"})
+    text = str(exc_info.value)
+    assert "source_group=exchange" in text
+    assert "request_id=r-fetch-fail" in text
+    assert "field=missing_field" in text
+    assert "runner_status=FETCH_FAILED" in text
+    assert "failure.reason=FIELD_MISSING" in text
+    assert "failure.detail=fixture does not contain requested field" in text
+    assert "failure.retry_allowed=False" in text
+
+
+def test_missing_null_valued_key_fails_key_set_parity():
+    from scripts.preflight_data_source_intake import compare_cards
+
+    expected = [{"request_id": "r1", "value": None}]
+    actual = [{"request_id": "r1"}]
+    report = compare_cards(actual, expected, {"requests": [{"request_id": "r1"}]})
+    assert report["parity"] is False
+    assert report["missing_keys"] == [{"request_id": "r1", "keys": ["value"]}]
+
+
+def test_extra_key_fails_key_set_parity():
+    from scripts.preflight_data_source_intake import compare_cards
+
+    expected = [{"request_id": "r1", "value": 1}]
+    actual = [{"request_id": "r1", "value": 1, "extra": "unexpected"}]
+    report = compare_cards(actual, expected, {"requests": [{"request_id": "r1"}]})
+    assert report["parity"] is False
+    assert report["extra_keys"] == [{"request_id": "r1", "keys": ["extra"]}]
+
+
+def test_runtime_rejects_forbidden_raw_field(tmp_path):
+    from scripts.preflight_data_source_intake import generate_cards
+
+    records = _load(RAW_PATH)
+    records[0]["source_tier"] = "A"
+    with pytest.raises(ValueError, match="forbidden raw record field.*source_tier"):
+        generate_cards(records, _manifest())
+
+
+def test_runtime_rejects_forbidden_request_field(tmp_path):
+    from scripts.preflight_data_source_intake import generate_cards
+
+    manifest = _manifest()
+    manifest["requests"][0]["source_name"] = "forbidden"
+    with pytest.raises(ValueError, match="forbidden request field.*source_name"):
+        generate_cards(_load(RAW_PATH), manifest)
+
+
+def test_runtime_rejects_duplicate_request_field():
+    from scripts.preflight_data_source_intake import generate_cards
+
+    manifest = _manifest()
+    manifest["requests"][1]["field"] = manifest["requests"][0]["field"]
+    with pytest.raises(ValueError, match="request fields must be unique"):
+        generate_cards(_load(RAW_PATH), manifest)

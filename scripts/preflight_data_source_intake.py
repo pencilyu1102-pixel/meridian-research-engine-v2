@@ -20,6 +20,20 @@ from tools.synthetic_data_source import SyntheticDataSource
 DEFAULT_RAW = ROOT / "examples/full_chain_sample/synthetic_source_records.json"
 DEFAULT_MANIFEST = ROOT / "examples/full_chain_sample/synthetic_fetch_manifest.json"
 DEFAULT_CANONICAL = ROOT / "examples/full_chain_sample/synthetic_data_cards.json"
+FORBIDDEN_RAW_FIELDS = {
+    "source",
+    "source_name",
+    "source_tier",
+    "request_id",
+    "data_provenance",
+    "can_enter_conclusion",
+}
+FORBIDDEN_REQUEST_FIELDS = {
+    "symbol",
+    "source_name",
+    "source_tier",
+    "data_provenance",
+}
 
 
 def load_inputs(raw_path: Path, manifest_path: Path, canonical_path: Path):
@@ -35,9 +49,20 @@ def _validate_manifest(records: Sequence[Mapping[str, Any]], manifest: Mapping[s
     requests = manifest["requests"]
     if len(records) != len(requests):
         raise ValueError(f"raw/request count mismatch: {len(records)} != {len(requests)}")
+    for record in records:
+        forbidden = sorted(FORBIDDEN_RAW_FIELDS.intersection(record))
+        if forbidden:
+            raise ValueError(f"forbidden raw record field: {forbidden[0]}")
+    for request in requests:
+        forbidden = sorted(FORBIDDEN_REQUEST_FIELDS.intersection(request))
+        if forbidden:
+            raise ValueError(f"forbidden request field: {forbidden[0]}")
     ids = [request["request_id"] for request in requests]
     if len(ids) != len(set(ids)):
         raise ValueError("manifest request_ids must be unique")
+    fields = [request["field"] for request in requests]
+    if len(fields) != len(set(fields)):
+        raise ValueError("manifest request fields must be unique")
     groups = set(manifest["sources"])
     if any(request["source_group"] not in groups for request in requests):
         raise ValueError("manifest request references unknown source_group")
@@ -102,16 +127,29 @@ def ensure_all_validated(
             request_id = result.get("request_id", "")
             field = result.get("field", "")
             violations = result.get("violations", [])
+            failure = result.get("failure")
         else:
             status = result.status.value if hasattr(result.status, "value") else result.status
             request_id = result.request_id
             field = result.field
             violations = result.violations
+            failure = result.failure
         if status != DataSourceRunStatus.CARD_VALIDATED.value:
+            details = (
+                f"runner_status={status} "
+                f"violations={list(violations)}"
+            )
+            if failure is not None:
+                reason = getattr(failure, "reason", None)
+                reason = reason.value if hasattr(reason, "value") else reason
+                details += (
+                    f" failure.reason={reason}"
+                    f" failure.detail={getattr(failure, 'detail', '')}"
+                    f" failure.retry_allowed={getattr(failure, 'retry_allowed', '')}"
+                )
             raise RuntimeError(
-                f"{status}: source_group="
-                f"{(source_group_by_request or {}).get(request_id, 'unknown')} "
-                f"request_id={request_id} field={field} violations={list(violations)}"
+                f"source_group={(source_group_by_request or {}).get(request_id, 'unknown')} "
+                f"request_id={request_id} field={field} {details}"
             )
 
 
@@ -120,18 +158,26 @@ def compare_cards(generated: Sequence[Mapping[str, Any]], canonical: Sequence[Ma
     canonical_ids = [card.get("request_id") for card in canonical]
     request_ids = [item["request_id"] for item in manifest["requests"]]
     field_mismatches: list[dict[str, Any]] = []
+    missing_keys: list[dict[str, Any]] = []
+    extra_keys: list[dict[str, Any]] = []
     for request_id in sorted(set(generated_ids) & set(canonical_ids)):
         actual = next(card for card in generated if card.get("request_id") == request_id)
         expected = next(card for card in canonical if card.get("request_id") == request_id)
-        for field in sorted(set(actual) | set(expected)):
-            if actual.get(field) != expected.get(field) or type(actual.get(field)) is not type(expected.get(field)):
+        missing = sorted(set(expected) - set(actual))
+        extra = sorted(set(actual) - set(expected))
+        if missing:
+            missing_keys.append({"request_id": request_id, "keys": missing})
+        if extra:
+            extra_keys.append({"request_id": request_id, "keys": extra})
+        for field in sorted(set(actual) & set(expected)):
+            if actual[field] != expected[field] or type(actual[field]) is not type(expected[field]):
                 field_mismatches.append({
                     "request_id": request_id,
                     "field": field,
-                    "expected": expected.get(field),
-                    "actual": actual.get(field),
-                    "expected_type": type(expected.get(field)).__name__,
-                    "actual_type": type(actual.get(field)).__name__,
+                    "expected": expected[field],
+                    "actual": actual[field],
+                    "expected_type": type(expected[field]).__name__,
+                    "actual_type": type(actual[field]).__name__,
                 })
     order_mismatches = [
         {"position": index, "expected": expected, "actual": actual}
@@ -142,11 +188,15 @@ def compare_cards(generated: Sequence[Mapping[str, Any]], canonical: Sequence[Ma
         "parity": (
             len(generated) == len(canonical) == len(request_ids)
             and generated_ids == canonical_ids == request_ids
+            and not missing_keys
+            and not extra_keys
             and not field_mismatches
         ),
         "missing_request_ids": [request_id for request_id in canonical_ids if request_id not in generated_ids],
         "extra_request_ids": [request_id for request_id in generated_ids if request_id not in canonical_ids],
         "order_mismatches": order_mismatches,
+        "missing_keys": missing_keys,
+        "extra_keys": extra_keys,
         "field_mismatches": field_mismatches,
     }
 
@@ -180,7 +230,13 @@ def main() -> int:
     try:
         print(json.dumps(run_preflight(args.raw, args.manifest, args.canonical), indent=2, ensure_ascii=False))
     except Exception as exc:
-        print(json.dumps({"status": "PREFLIGHT_FAIL", "error": str(exc)}, indent=2, ensure_ascii=False))
+        try:
+            failure = json.loads(str(exc))
+            if not isinstance(failure, dict) or failure.get("status") != "PREFLIGHT_FAIL":
+                raise ValueError
+        except (TypeError, ValueError, json.JSONDecodeError):
+            failure = {"status": "PREFLIGHT_FAIL", "error": str(exc)}
+        print(json.dumps(failure, indent=2, ensure_ascii=False))
         return 1
     return 0
 
