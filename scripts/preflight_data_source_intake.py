@@ -13,27 +13,11 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools.data_source import FetchRequest
-from tools.data_source_runner import DataSourceRunStatus, run_batch
-from tools.synthetic_data_source import SyntheticDataSource
+from tools.bundle_data_card_resolver import ensure_all_validated, generate_datasource_cards
 
 DEFAULT_RAW = ROOT / "examples/full_chain_sample/synthetic_source_records.json"
 DEFAULT_MANIFEST = ROOT / "examples/full_chain_sample/synthetic_fetch_manifest.json"
 DEFAULT_CANONICAL = ROOT / "examples/full_chain_sample/synthetic_data_cards.json"
-FORBIDDEN_RAW_FIELDS = {
-    "source",
-    "source_name",
-    "source_tier",
-    "request_id",
-    "data_provenance",
-    "can_enter_conclusion",
-}
-FORBIDDEN_REQUEST_FIELDS = {
-    "symbol",
-    "source_name",
-    "source_tier",
-    "data_provenance",
-}
 
 
 def load_inputs(raw_path: Path, manifest_path: Path, canonical_path: Path):
@@ -45,112 +29,9 @@ def load_inputs(raw_path: Path, manifest_path: Path, canonical_path: Path):
     return records, manifest, canonical
 
 
-def _validate_manifest(records: Sequence[Mapping[str, Any]], manifest: Mapping[str, Any]) -> None:
-    requests = manifest["requests"]
-    if len(records) != len(requests):
-        raise ValueError(f"raw/request count mismatch: {len(records)} != {len(requests)}")
-    for record in records:
-        forbidden = sorted(FORBIDDEN_RAW_FIELDS.intersection(record))
-        if forbidden:
-            raise ValueError(f"forbidden raw record field: {forbidden[0]}")
-    for request in requests:
-        forbidden = sorted(FORBIDDEN_REQUEST_FIELDS.intersection(request))
-        if forbidden:
-            raise ValueError(f"forbidden request field: {forbidden[0]}")
-    ids = [request["request_id"] for request in requests]
-    if len(ids) != len(set(ids)):
-        raise ValueError("manifest request_ids must be unique")
-    fields = [request["field"] for request in requests]
-    if len(fields) != len(set(fields)):
-        raise ValueError("manifest request fields must be unique")
-    groups = set(manifest["sources"])
-    if any(request["source_group"] not in groups for request in requests):
-        raise ValueError("manifest request references unknown source_group")
-    if manifest["data_provenance"] != "SYNTHETIC_FIXTURE":
-        raise ValueError("preflight only accepts SYNTHETIC_FIXTURE provenance")
-    for record in records:
-        if record["source_group"] not in groups:
-            raise ValueError(f"raw record references unknown source_group: {record['source_group']}")
-        if record["symbol"] != manifest["symbol"]:
-            raise ValueError("raw record symbol differs from manifest symbol")
-
-
-def _make_request(manifest: Mapping[str, Any], item: Mapping[str, Any]) -> FetchRequest:
-    return FetchRequest(
-        symbol=manifest["symbol"],
-        field=item["field"],
-        period=item["period"],
-        request_id=item["request_id"],
-    )
-
-
 def generate_cards(records: Sequence[Mapping[str, Any]], manifest: Mapping[str, Any]):
-    """Run one batch per source group and restore manifest order."""
-    _validate_manifest(records, manifest)
-    by_group: dict[str, list[Mapping[str, Any]]] = {}
-    for record in records:
-        by_group.setdefault(record["source_group"], []).append(record)
-    requests_by_group: dict[str, list[FetchRequest]] = {}
-    for item in manifest["requests"]:
-        requests_by_group.setdefault(item["source_group"], []).append(_make_request(manifest, item))
-
-    results_by_id: dict[str, Any] = {}
-    source_group_by_request = {
-        item["request_id"]: item["source_group"] for item in manifest["requests"]
-    }
-    batches = []
-    for group, definition in manifest["sources"].items():
-        source = SyntheticDataSource(
-            records=by_group.get(group, []),
-            default_tier=definition["source_tier"],
-            source_name=definition["source_name"],
-        )
-        batch = run_batch(source, requests_by_group.get(group, []))
-        batches.append(batch)
-        for result in batch.results:
-            results_by_id[result.request_id] = result
-    ensure_all_validated(
-        list(results_by_id.values()),
-        source_group_by_request=source_group_by_request,
-    )
-    return [results_by_id[item["request_id"]].card for item in manifest["requests"]], batches
-
-
-def ensure_all_validated(
-    results: Sequence[Any],
-    *,
-    source_group_by_request: Mapping[str, str] | None = None,
-) -> None:
-    for result in results:
-        if isinstance(result, Mapping):
-            status = result.get("status", "")
-            request_id = result.get("request_id", "")
-            field = result.get("field", "")
-            violations = result.get("violations", [])
-            failure = result.get("failure")
-        else:
-            status = result.status.value if hasattr(result.status, "value") else result.status
-            request_id = result.request_id
-            field = result.field
-            violations = result.violations
-            failure = result.failure
-        if status != DataSourceRunStatus.CARD_VALIDATED.value:
-            details = (
-                f"runner_status={status} "
-                f"violations={list(violations)}"
-            )
-            if failure is not None:
-                reason = getattr(failure, "reason", None)
-                reason = reason.value if hasattr(reason, "value") else reason
-                details += (
-                    f" failure.reason={reason}"
-                    f" failure.detail={getattr(failure, 'detail', '')}"
-                    f" failure.retry_allowed={getattr(failure, 'retry_allowed', '')}"
-                )
-            raise RuntimeError(
-                f"source_group={(source_group_by_request or {}).get(request_id, 'unknown')} "
-                f"request_id={request_id} field={field} {details}"
-            )
+    """Compatibility wrapper around the shared intake generator."""
+    return generate_datasource_cards(records, manifest)
 
 
 def compare_cards(generated: Sequence[Mapping[str, Any]], canonical: Sequence[Mapping[str, Any]], manifest: Mapping[str, Any]) -> dict[str, Any]:
