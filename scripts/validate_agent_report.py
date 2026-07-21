@@ -89,20 +89,19 @@ def _canonical_json_hash(obj: Any) -> str:
 
 
 def compute_artifact_hashes(bundle: dict[str, Any]) -> dict[str, str]:
-    """Compute SHA256 hashes of all referenced artifact files.
+    """Compute SHA256 hashes of Bundle Data Card and industry artifacts.
 
-    Covers: data_cards, industry_hard_fields.
+    Data Card resolution is delegated to the shared resolver. Legacy static
+    mode preserves the historical ``data_cards`` key and raw-byte hash;
+    datasource intake exposes records, manifest, and generated-card hashes.
     """
+    from tools.bundle_data_card_resolver import resolve_bundle_data_cards
+
     bundle_dir = Path(bundle.get("_bundle_dir", "."))
-    hashes: dict[str, str] = {}
+    resolved_cards = resolve_bundle_data_cards(bundle)
+    hashes = dict(resolved_cards.artifact_hashes)
 
-    # Data cards
-    dc_path = bundle.get("data_cards", {}).get("path", "")
-    if dc_path:
-        resolved = _resolve_safe(dc_path, bundle_dir)
-        hashes["data_cards"] = _file_sha256(resolved)
-
-    # Industry hard fields
+    # Industry hard fields remain a direct referenced artifact.
     ihf_path = bundle.get("industry_hard_fields", {}).get("path", "")
     if ihf_path:
         resolved = _resolve_safe(ihf_path, bundle_dir)
@@ -215,6 +214,7 @@ def build_hardlock_from_bundle(bundle: dict[str, Any]) -> dict[str, Any]:
     Synthetic data is capped at PASS_TEST_ONLY — never formally releasable.
     All data is expected to be synthetic fixture — no real market data.
     """
+    from tools.bundle_data_card_resolver import resolve_bundle_data_cards
     from tools.data_card_registry import DataCardRegistry
     from tools.earnings_basis_checker import check_earnings_basis
     from tools.industry_hard_fields import check_industry_hard_fields, load_industry_hard_fields
@@ -225,10 +225,8 @@ def build_hardlock_from_bundle(bundle: dict[str, Any]) -> dict[str, Any]:
     bundle_dir = Path(bundle["_bundle_dir"])
     provenance = bundle.get("meta", {}).get("data_provenance", "")
 
-    cards_path = _resolve_safe(bundle["data_cards"]["path"], bundle_dir)
-    cards_json = json.loads(cards_path.read_text(encoding="utf-8"))
-    if not isinstance(cards_json, list):
-        raise TypeError("data_cards must be a JSON array")
+    resolved_cards = resolve_bundle_data_cards(bundle)
+    cards_json = list(resolved_cards.cards)
     registry = DataCardRegistry(cards_json)
     eps_v = registry.validate("eps_ttm", data_provenance=provenance)
     price_v = registry.validate("current_price", data_provenance=provenance)
